@@ -1,0 +1,43 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.development.unobtainium.cimedic2.fragments.PatientsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_progress"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="false" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/add"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/include"
+        android:baselineAlignBottom="false"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="@dimen/fab_margin" />
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/patientsGrid"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="columnWidth"
+        android:scrollbars="none"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false"
+        android:layout_gravity="right|bottom" />
+
+</FrameLayout>
