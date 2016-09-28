@@ -29,10 +29,10 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import retrofit.Call;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,7 +48,7 @@ public class PatientsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private RelativesTask mRelativesTask = null;
-    final String api_endpoint = "http://192.168.1.105:3000/api/v1/patients/";
+    final String api_endpoint = "http://192.168.10.124:3000/api/v1/patients/";
     private ArrayList<Patient> patients;
     private ServiceError sError;
     private String error = "";
@@ -90,6 +90,7 @@ public class PatientsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+
 
     public class RelativesTask extends AsyncTask<Void, Void, Boolean> {
         final Context context = getContext();

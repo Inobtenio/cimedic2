@@ -1,5 +1,7 @@
 package com.development.unobtainium.cimedic2.models;
 
+import java.io.File;
+
 /**
  * Created by unobtainium on 24/09/16.
  */
@@ -15,6 +17,12 @@ public class Patient {
     private String address;
     private String email;
     private String password;
+    private String image;
+    private File picture;
+
+    public void setPicture(File picture) {
+        this.picture = picture;
+    }
 
     public Patient(String names, String last_name, String mothers_last_name, String birthday, int district_id, String document_number, int document_type, String address, String email, String password) {
         this.names = names;

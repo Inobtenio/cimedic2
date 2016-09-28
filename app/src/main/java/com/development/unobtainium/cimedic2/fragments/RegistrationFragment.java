@@ -1,14 +1,25 @@
 package com.development.unobtainium.cimedic2.fragments;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +28,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,23 +42,33 @@ import com.development.unobtainium.cimedic2.responses.PatientResponse;
 import com.development.unobtainium.cimedic2.retrofit.ServiceError;
 import com.development.unobtainium.cimedic2.retrofit.ServicesInterface;
 import com.google.gson.Gson;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import retrofit.Call;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+//import okhttp3.MediaType;
+//import okhttp3.MultipartBody;
+//import okhttp3.RequestBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class RegistrationFragment extends Fragment {
     private static final String SHOW_PASSWORD = "show_password";
     private static final String PATIENT_ID = "patient_id";
     private OnFragmentInteractionListener mListener;
     private PatientRegisterTask mRegisterTask = null;
-    final String api_endpoint = "http://192.168.1.105:3000/api/v1/patients/";
+    final String api_endpoint = "http://192.168.10.124:3000/api/v1/patients/"; //"http://192.168.1.105:3000/api/v1/patients/";
     private Patient loggedPatient;
     private Patient patient;
     private Boolean authenticated = false;
@@ -54,8 +76,12 @@ public class RegistrationFragment extends Fragment {
     private String error = "";
     private View mProgressView;
     private EditText bithdayInput;
-    Gson gson;
+    private ImageView patientPicture;
+    final Gson gson = new Gson();
+    private File picture = null;
     Calendar myCalendar = Calendar.getInstance();
+    MultipartBody.Part body;
+    RequestBody requestFile;
 
     public RegistrationFragment() {
         // Required empty public constructor
@@ -93,6 +119,7 @@ public class RegistrationFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         mProgressView = getView().findViewById(R.id.registration_progress);
+        patientPicture = (ImageView) getView().findViewById(R.id.profile_picture);
         showProgress(false);
         final EditText namesInput = (EditText) getView().findViewById(R.id.names_input);
         final EditText lastNameInput = (EditText) getView().findViewById(R.id.last_name_input);
@@ -151,6 +178,66 @@ public class RegistrationFragment extends Fragment {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+
+        patientPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), 100);
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.e("SSSSSSSSSSAAAA", String.valueOf(requestCode));
+        Log.e("SSSSSSSSSSAAAA", String.valueOf(Activity.RESULT_OK));
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK && null != data) {
+
+            String uri = getRealPathFromURI_API19(getActivity().getApplicationContext(), data.getData());
+//            picture = new File(filePath);
+            Transformation transformation = new RoundedTransformationBuilder()
+                    .cornerRadiusDp(70)
+                    .oval(true)
+                    .build();
+            Picasso.with(getActivity().getApplicationContext())
+                    .load(data.getData())
+                    .fit().centerCrop()
+                    .transform(transformation)
+                    .into(patientPicture);
+//            patientPicture.setImageURI(data.getData());
+            Log.e("PPPPPPPPPPPPPP", gson.toJson(uri));
+//            picture = new File(Environment.DIRECTORY_PICTURES.toString() + uri.getPath());
+            picture = new File(uri);
+        }
+    }
+
+    public static String getRealPathFromURI_API19(Context context, Uri uri){
+        String filePath = "";
+        String wholeID = DocumentsContract.getDocumentId(uri);
+
+        // Split at colon, use second item in the array
+        String id = wholeID.split(":")[1];
+
+        String[] column = { MediaStore.Images.Media.DATA };
+
+        // where id is equal to
+        String sel = MediaStore.Images.Media._ID + "=?";
+
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                column, sel, new String[]{ id }, null);
+
+        int columnIndex = cursor.getColumnIndex(column[0]);
+
+        if (cursor.moveToFirst()) {
+            filePath = cursor.getString(columnIndex);
+        }
+        cursor.close();
+        return filePath;
     }
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -200,8 +287,27 @@ public class RegistrationFragment extends Fragment {
             ServicesInterface apiService =
                     retrofit.create(ServicesInterface.class);
 
+            if (picture != null){
+//                requestFile =
+//                        RequestBody.create(MediaType.parse("image/png"), picture);
 
-            final Call<PatientResponse> call = apiService.registerPatient(getArguments().getString(PATIENT_ID),patient);
+                // MultipartBody.Part is used to send also the actual file name
+//                body =
+//                        MultipartBody.Part.createFormData("picture", picture.getName(), requestFile);
+
+                requestFile = RequestBody.create(MediaType.parse("image/jpg"), picture);
+                Log.e("BBBBBBBB",requestFile.contentType().toString());
+                body = MultipartBody.Part.createFormData("patient[picture]", picture.getName(), requestFile);
+
+
+            }
+            Log.e("BBBBBBBB",requestFile.contentType().toString());
+            RequestBody requestPatient = RequestBody.create(MediaType.parse("text/plain"), "SSSSSSSSSSSSSSSS");
+//            TypedFile image = new TypedFile("image/png", file);
+//            com.squareup.okhttp.RequestBody requestPatient = com.squareup.okhttp.RequestBody.create(MediaType.parse("application/json"), patient.getNames());
+//            RequestBody requestPatient = RequestBody.create(MediaType.parse("image/png"), patient.getNames());
+
+            final Call<PatientResponse> call = apiService.registerPatient(getArguments().getString(PATIENT_ID), body, requestPatient);
             try {
                 Response<PatientResponse> response = call.execute();
                 loggedPatient = response.body().patient;

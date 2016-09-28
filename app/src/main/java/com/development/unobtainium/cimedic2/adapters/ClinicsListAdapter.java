@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import com.development.unobtainium.cimedic2.R;
 import com.development.unobtainium.cimedic2.fragments.SpecialtiesFragment;
 import com.development.unobtainium.cimedic2.models.Clinic;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -84,8 +85,12 @@ public class ClinicsListAdapter extends BaseAdapter {
         View row;
         row = LayoutInflater.from(parent.getContext()).inflate(R.layout.clinic_item, parent, false);
         holder.picture = (ImageView) row.findViewById(R.id.clinic_picture);
-        new DownloadImageTask((ImageView) row.findViewById(R.id.clinic_picture))
-                .execute(clinics.get(position).getImage());
+//        new DownloadImageTask((ImageView) row.findViewById(R.id.clinic_picture))
+//                .execute(clinics.get(position).getImage());
+        if (holder.picture == null) {
+            holder.picture = new ImageView(mContext);//(ImageView) row.findViewById(R.id.clinic_picture);
+        }
+        Picasso.with(mContext).load(clinics.get(position).getImage()).resize(1100,450).into(holder.picture);
 //        holder.picture.setImageDrawable(mContext.getResources().getDrawable(R.drawable.clinic_placeholder));
         row.setOnClickListener(new View.OnClickListener() {
             @Override

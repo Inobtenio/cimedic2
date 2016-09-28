@@ -34,10 +34,10 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
-import retrofit.Call;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener {
 
@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements SearchFragment.O
     private ServiceError sError;
     private String error = "";
     private String obtainedId = "";
-    final String api_endpoint = "http://192.168.1.105:3000/api/v1/patients/";
+    final String api_endpoint = "http://192.168.10.124:3000/api/v1/patients/";
 
 
     private PatientLoginTask mAuthTask = null;

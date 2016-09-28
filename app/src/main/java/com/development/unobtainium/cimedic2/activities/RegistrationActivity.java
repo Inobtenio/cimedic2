@@ -35,10 +35,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import retrofit.Call;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class RegistrationActivity extends AppCompatActivity implements SearchFragment.OnFragmentInteractionListener, RegistrationFragment.OnFragmentInteractionListener{
 
