@@ -3,7 +3,6 @@ package com.development.unobtainium.cimedic2.managers;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.development.unobtainium.cimedic2.activities.LoginActivity;
 
@@ -21,6 +20,7 @@ public class PatientSessionManager {
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_ID = "id";
+    public static final String KEY_IMAGE = "image";
 //    public static final String KEY_REMEMBER_PASSWORD = "rememberPassword";
     //public static final String KEY_TOKEN = "token";
 
@@ -37,11 +37,12 @@ public class PatientSessionManager {
     }
 
     //Create login session
-    public void createPatientLoginSession(Integer id, String email, String name){
+    public void createPatientLoginSession(Integer id, String email, String name, String image){
         editor.putBoolean(IS_PATIENT_LOGGED_IN, true);
         editor.putString(KEY_ID, id.toString());
         editor.putString(KEY_EMAIL, email);
         editor.putString(KEY_NAME, name);
+        editor.putString(KEY_IMAGE, image);
         editor.commit();
     }
 
@@ -64,6 +65,9 @@ public class PatientSessionManager {
     }
     public String getLoggedPatientId(){
         return pref.getString(KEY_ID, "");
+    }
+    public String getLoggedPatientImage(){
+        return pref.getString(KEY_IMAGE, "");
     }
 
     /**

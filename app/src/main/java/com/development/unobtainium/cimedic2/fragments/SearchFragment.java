@@ -44,7 +44,7 @@ public class SearchFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private ClinicsTask mClinicsTask = null;
-    final String api_endpoint = "http://192.168.10.124:3000/api/v1/"; //"http://192.168.1.105:3000/api/v1/";
+    final String api_endpoint = "https://medic-1.herokuapp.com/api/v1/"; //"http://192.168.1.105:3000/api/v1/";
     private ArrayList<Clinic> clinics;
     private ServiceError sError;
     private String error = "";

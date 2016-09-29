@@ -48,7 +48,7 @@ public class PatientsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private RelativesTask mRelativesTask = null;
-    final String api_endpoint = "http://192.168.10.124:3000/api/v1/patients/";
+    final String api_endpoint = "https://medic-1.herokuapp.com/api/v1/patients/";
     private ArrayList<Patient> patients;
     private ServiceError sError;
     private String error = "";

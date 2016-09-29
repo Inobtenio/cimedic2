@@ -90,7 +90,7 @@ public class ClinicsListAdapter extends BaseAdapter {
         if (holder.picture == null) {
             holder.picture = new ImageView(mContext);//(ImageView) row.findViewById(R.id.clinic_picture);
         }
-        Picasso.with(mContext).load(clinics.get(position).getImage()).resize(1100,450).into(holder.picture);
+        Picasso.with(mContext).load(clinics.get(position).getImage()).resize(1100,300).into(holder.picture);
 //        holder.picture.setImageDrawable(mContext.getResources().getDrawable(R.drawable.clinic_placeholder));
         row.setOnClickListener(new View.OnClickListener() {
             @Override

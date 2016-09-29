@@ -24,6 +24,9 @@ import com.development.unobtainium.cimedic2.fragments.RegistrationFragment;
 import com.development.unobtainium.cimedic2.fragments.SearchFragment;
 import com.development.unobtainium.cimedic2.fragments.SpecialtiesFragment;
 import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 public class SearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.OnFragmentInteractionListener, PatientsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, RegistrationFragment.OnFragmentInteractionListener, SpecialtiesFragment.OnFragmentInteractionListener {
@@ -53,7 +56,21 @@ public class SearchActivity extends AppCompatActivity
         ImageView currentPatientPicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.patientPicture);
         currentPatientName.setText(psm.getLoggedPatientName());
         currentPatientEmail.setText(psm.getLoggedPatientEmail());
-        currentPatientPicture.setImageDrawable(getResources().getDrawable(R.drawable.patient_placeholder));
+        String imageUrl = PatientSessionManager.getInstance(getApplicationContext()).getLoggedPatientImage();
+        if (!imageUrl.equals("")) {
+            Transformation transformation = new RoundedTransformationBuilder()
+                    .cornerRadiusDp(45)
+                    .oval(true)
+                    .build();
+            Picasso.with(getApplicationContext())
+                    .load(PatientSessionManager.getInstance(getApplicationContext()).getLoggedPatientImage())
+                    .fit().centerCrop()
+                    .transform(transformation)
+                    .into(currentPatientPicture);
+        } else {
+            currentPatientPicture.setImageDrawable(getResources().getDrawable(R.drawable.patient_placeholder));
+        };
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 

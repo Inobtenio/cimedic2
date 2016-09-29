@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements SearchFragment.O
     private ServiceError sError;
     private String error = "";
     private String obtainedId = "";
-    final String api_endpoint = "http://192.168.10.124:3000/api/v1/patients/";
+    final String api_endpoint = "https://medic-1.herokuapp.com/api/v1/patients/";
 
 
     private PatientLoginTask mAuthTask = null;
@@ -222,7 +222,7 @@ public class LoginActivity extends AppCompatActivity implements SearchFragment.O
             if (success) {
                 if (sError == null){
                     PatientSessionManager psm = new PatientSessionManager(context);
-                    psm.createPatientLoginSession(loggedPatient.getId(), loggedPatient.getEmail(), loggedPatient.getNames());
+                    psm.createPatientLoginSession(loggedPatient.getId(), loggedPatient.getEmail(), loggedPatient.getNames(), loggedPatient.getImage());
                     startActivity(new Intent(getApplicationContext(), SearchActivity.class));
                     finish();
                 } else {

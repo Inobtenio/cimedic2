@@ -68,7 +68,7 @@ public class RegistrationFragment extends Fragment {
     private static final String PATIENT_ID = "patient_id";
     private OnFragmentInteractionListener mListener;
     private PatientRegisterTask mRegisterTask = null;
-    final String api_endpoint = "http://192.168.10.124:3000/api/v1/patients/"; //"http://192.168.1.105:3000/api/v1/patients/";
+    final String api_endpoint = "https://medic-1.herokuapp.com/api/v1/patients/"; //"http://192.168.1.105:3000/api/v1/patients/";
     private Patient loggedPatient;
     private Patient patient;
     private Boolean authenticated = false;
@@ -315,7 +315,7 @@ public class RegistrationFragment extends Fragment {
                 if (sError == null){
                     if (getActivity() instanceof RegistrationActivity){
                         PatientSessionManager psm = new PatientSessionManager(context);
-                        psm.createPatientLoginSession(loggedPatient.getId(), loggedPatient.getEmail(), loggedPatient.getNames());
+                        psm.createPatientLoginSession(loggedPatient.getId(), loggedPatient.getEmail(), loggedPatient.getNames(), loggedPatient.getImage());
                         startActivity(new Intent(getContext(), SearchActivity.class));
                     } else {
                         FragmentManager fm = getFragmentManager();
