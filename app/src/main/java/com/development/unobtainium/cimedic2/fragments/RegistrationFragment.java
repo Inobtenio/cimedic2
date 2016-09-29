@@ -143,8 +143,6 @@ public class RegistrationFragment extends Fragment {
             }
         }
 
-//        Log.e("dsadsadasda", gson.toJson(prevIntent.getExtras()));
-
         ArrayAdapter<CharSequence> docTypes = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.doc_types_array, R.layout.support_simple_spinner_dropdown_item);
         ArrayAdapter<CharSequence> departments = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.departments_array, R.layout.support_simple_spinner_dropdown_item);
         ArrayAdapter<CharSequence> districts = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.districts_array, R.layout.support_simple_spinner_dropdown_item);
@@ -161,7 +159,7 @@ public class RegistrationFragment extends Fragment {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                patient = new Patient(namesInput.getText().toString(), lastNameInput.getText().toString(), mothersLastNameInput.getText().toString(), bithdayInput.getText().toString(), districtSpinner.getSelectedItemPosition(), documentNumberInput.getText().toString(), docTypeSpinner.getSelectedItemPosition(), addressInput.getText().toString(), emailInput.getText().toString(), passwordInput.getText().toString());
+                patient = new Patient(namesInput.getText().toString(), lastNameInput.getText().toString(), mothersLastNameInput.getText().toString(), bithdayInput.getText().toString(), districtSpinner.getSelectedItemPosition()+1, documentNumberInput.getText().toString(), docTypeSpinner.getSelectedItemPosition()+1, addressInput.getText().toString(), emailInput.getText().toString(), passwordInput.getText().toString());
                 showProgress(true);
                 mRegisterTask = new PatientRegisterTask(patient);
                 mRegisterTask.execute((Void) null);
@@ -193,13 +191,9 @@ public class RegistrationFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        Log.e("SSSSSSSSSSAAAA", String.valueOf(requestCode));
-        Log.e("SSSSSSSSSSAAAA", String.valueOf(Activity.RESULT_OK));
         if (requestCode == 100 && resultCode == Activity.RESULT_OK && null != data) {
 
             String uri = getRealPathFromURI_API19(getActivity().getApplicationContext(), data.getData());
-//            picture = new File(filePath);
             Transformation transformation = new RoundedTransformationBuilder()
                     .cornerRadiusDp(70)
                     .oval(true)
@@ -209,9 +203,6 @@ public class RegistrationFragment extends Fragment {
                     .fit().centerCrop()
                     .transform(transformation)
                     .into(patientPicture);
-//            patientPicture.setImageURI(data.getData());
-            Log.e("PPPPPPPPPPPPPP", gson.toJson(uri));
-//            picture = new File(Environment.DIRECTORY_PICTURES.toString() + uri.getPath());
             picture = new File(uri);
         }
     }
@@ -288,26 +279,21 @@ public class RegistrationFragment extends Fragment {
                     retrofit.create(ServicesInterface.class);
 
             if (picture != null){
-//                requestFile =
-//                        RequestBody.create(MediaType.parse("image/png"), picture);
-
-                // MultipartBody.Part is used to send also the actual file name
-//                body =
-//                        MultipartBody.Part.createFormData("picture", picture.getName(), requestFile);
-
                 requestFile = RequestBody.create(MediaType.parse("image/jpg"), picture);
-                Log.e("BBBBBBBB",requestFile.contentType().toString());
                 body = MultipartBody.Part.createFormData("patient[picture]", picture.getName(), requestFile);
-
-
             }
-            Log.e("BBBBBBBB",requestFile.contentType().toString());
-            RequestBody requestPatient = RequestBody.create(MediaType.parse("text/plain"), "SSSSSSSSSSSSSSSS");
-//            TypedFile image = new TypedFile("image/png", file);
-//            com.squareup.okhttp.RequestBody requestPatient = com.squareup.okhttp.RequestBody.create(MediaType.parse("application/json"), patient.getNames());
-//            RequestBody requestPatient = RequestBody.create(MediaType.parse("image/png"), patient.getNames());
+            RequestBody names = RequestBody.create(MediaType.parse("text/plain"), patient.getNames());
+            RequestBody last_name = RequestBody.create(MediaType.parse("text/plain"), patient.getLast_name());
+            RequestBody mothers_last_name = RequestBody.create(MediaType.parse("text/plain"), patient.getMothers_last_name());
+            RequestBody birthday = RequestBody.create(MediaType.parse("text/plain"), patient.getBirthday());
+            RequestBody district_id = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(patient.getDistrict_id()));
+            RequestBody document_number = RequestBody.create(MediaType.parse("text/plain"), patient.getDocument_number());
+            RequestBody document_type = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(patient.getDocument_type()));
+            RequestBody address = RequestBody.create(MediaType.parse("text/plain"), patient.getAddress());
+            RequestBody email = RequestBody.create(MediaType.parse("text/plain"), patient.getEmail());
+            RequestBody password = RequestBody.create(MediaType.parse("text/plain"), patient.getPassword());
 
-            final Call<PatientResponse> call = apiService.registerPatient(getArguments().getString(PATIENT_ID), body, requestPatient);
+            final Call<PatientResponse> call = apiService.registerPatient(getArguments().getString(PATIENT_ID), body, names, last_name, mothers_last_name, birthday, district_id, document_number, document_type, address, email, password);
             try {
                 Response<PatientResponse> response = call.execute();
                 loggedPatient = response.body().patient;

@@ -13,7 +13,6 @@ public class ChoosingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choosing);
         PatientSessionManager psm = PatientSessionManager.getInstance(getApplicationContext());
         if (psm.isPatientLoggedIn()) {
             intent = new Intent(getApplicationContext(), SearchActivity.class);

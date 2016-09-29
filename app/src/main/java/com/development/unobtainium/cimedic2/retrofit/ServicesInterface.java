@@ -29,7 +29,17 @@ public interface ServicesInterface {
 
     @Multipart
     @POST("./")
-    Call<PatientResponse> registerPatient(@Header("Authorization") String authorization, @Part MultipartBody.Part picture, @Part("patient[names]") okhttp3.RequestBody names);
+    Call<PatientResponse> registerPatient(@Header("Authorization") String authorization, @Part MultipartBody.Part picture,
+                                          @Part("patient[names]") RequestBody names,
+                                          @Part("patient[last_name]") RequestBody last_name,
+                                          @Part("patient[mothers_last_name]") RequestBody mothers_last_name,
+                                          @Part("patient[birthday]") RequestBody birthday,
+                                          @Part("patient[district_id]") RequestBody district_id,
+                                          @Part("patient[document_number]") RequestBody document_number,
+                                          @Part("patient[document_type]") RequestBody document_type,
+                                          @Part("patient[address]") RequestBody address,
+                                          @Part("patient[email]") RequestBody email,
+                                          @Part("patient[password]") RequestBody password);
 
     @GET("relatives")
     Call<RelativesResponse> getRelatives(@Header("Authorization") String authorization);

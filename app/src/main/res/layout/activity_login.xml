@@ -27,11 +27,11 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="195dp"
+        android:layout_height="180dp"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="16dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="165dp"
+        android:layout_marginTop="180dp"
         android:layout_marginRight="16dp"
         android:layout_alignParentBottom="true">
 
@@ -109,5 +109,14 @@
 
         </RelativeLayout>
     </ScrollView>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/splash_logo"
+        android:layout_marginRight="0dp"
+        android:layout_below="@+id/login_progress"
+        android:layout_alignEnd="@+id/login_form" />
 
 </RelativeLayout>

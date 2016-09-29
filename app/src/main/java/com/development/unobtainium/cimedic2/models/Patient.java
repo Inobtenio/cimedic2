@@ -16,6 +16,15 @@ public class Patient {
     private int document_type;
     private String address;
     private String email;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     private String password;
     private String image;
     private File picture;
