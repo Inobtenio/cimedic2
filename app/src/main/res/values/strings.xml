@@ -41,6 +41,12 @@
         <item>Barranco</item>
         <item>Magdalena del Mar</item>
     </string-array>
+
+    <string-array name="relationsips_array">
+        <item>Padre</item>
+        <item>Madre</item>
+        <item>Hijo</item>
+    </string-array>
     <string name="title_activity_test">TestActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

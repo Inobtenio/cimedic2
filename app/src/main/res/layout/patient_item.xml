@@ -11,6 +11,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
 
+
+    <ImageView
+        android:id="@+id/badge"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_alignRight="@+id/patient_photo"
+        android:layout_alignTop="@+id/patient_photo"
+        android:foreground="@color/buttonColor" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

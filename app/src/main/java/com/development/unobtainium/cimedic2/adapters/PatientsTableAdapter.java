@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,12 @@ import android.widget.TextView;
 import com.development.unobtainium.cimedic2.R;
 import com.development.unobtainium.cimedic2.activities.SearchActivity;
 import com.development.unobtainium.cimedic2.fragments.SearchFragment;
+import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
 import com.development.unobtainium.cimedic2.models.Patient;
+import com.google.gson.Gson;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 
@@ -28,15 +34,6 @@ public class PatientsTableAdapter extends BaseAdapter {
     private ArrayList<Patient> patientList = new ArrayList<Patient>();
 
     public PatientsTableAdapter(Context mContext, ArrayList<Patient> relatives) {
-//        patientList.add(patient1);
-//        patientList.add(patient2);
-//        patientList.add(patient3);
-//        patientList.add(patient4);
-//        patientList.add(patient5);
-//        patientList.add(patient6);
-//        patientList.add(patient7);
-//        patientList.add(patient8);
-//        patientList.add(patient9);
         patientList = relatives;
         this.mContext = mContext;
     }
@@ -58,21 +55,55 @@ public class PatientsTableAdapter extends BaseAdapter {
 
     public class Holder {
         ImageView picture;
+        ImageView current;
         TextView name;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
+        Log.e("PATIENTS", new Gson().toJson(patientList));
         Holder holder = new Holder();
         View cell;
         cell = LayoutInflater.from(parent.getContext()).inflate(R.layout.patient_item, parent, false);
+        String loggedPatientId = PatientSessionManager.getInstance(parent.getContext()).getLoggedPatientId();
         holder.picture = (ImageView) cell.findViewById(R.id.patient_photo);
-        holder.picture.setImageDrawable(mContext.getResources().getDrawable(R.drawable.patient_placeholder));
+        holder.current = (ImageView) cell.findViewById(R.id.badge);
+        if (!patientList.get(position).getImage().equals("")) {
+            Transformation transformation = new RoundedTransformationBuilder()
+                    .cornerRadiusDp(60)
+                    .oval(true)
+                    .build();
+            Picasso.with(parent.getContext())
+                    .load(patientList.get(position).getImage())
+                    .fit().centerCrop()
+                    .transform(transformation)
+                    .into(holder.picture);
+        } else {
+            holder.picture.setImageDrawable(parent.getResources().getDrawable(R.drawable.patient_placeholder));
+        };
+        if (String.valueOf(patientList.get(position).getId()).equals(loggedPatientId)){
+            Transformation transformationBadge = new RoundedTransformationBuilder()
+                    .cornerRadiusDp(8)
+                    .oval(true)
+                    .build();
+            Picasso.with(parent.getContext())
+                    .load(String.valueOf(parent.getResources().getDrawable(R.drawable.patient_placeholder)))
+                    .fit().centerCrop()
+                    .transform(transformationBadge)
+                    .into(holder.current);
+        } else {
+            holder.current.setVisibility(View.INVISIBLE);
+        }
+        Log.e("LOGGED PATIENT", loggedPatientId);
+        Log.e("PATIENT", String.valueOf(patientList.get(position).getId()));
         holder.name = (TextView) cell.findViewById(R.id.patient_name);
         holder.name.setText(patientList.get(position).getNames());
         cell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PatientSessionManager psm = new PatientSessionManager(parent.getContext());
+                psm.createPatientLoginSession(patientList.get(position).getId(), patientList.get(position).getEmail(), patientList.get(position).getNames(), patientList.get(position).getImage());
+                ((SearchActivity) mContext).updateProfilePicture();
                 FragmentManager fm = ((Activity) mContext).getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 SearchFragment llf = new SearchFragment();

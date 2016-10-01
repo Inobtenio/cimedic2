@@ -9,20 +9,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activities.LoginActivity">
+    tools:context=".activities.LoginActivity"
+    android:elevation="5dp">
 
     <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="0dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp" />
 
     <ScrollView
         android:id="@+id/login_form"
@@ -43,6 +33,16 @@
             android:descendantFocusability="beforeDescendants"
             android:focusableInTouchMode="true">
 
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/login_progress"
+                android:indeterminate="false"
+                android:layout_alignTop="@+id/password"
+                android:layout_centerHorizontal="true" />
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
@@ -57,8 +57,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="0dp"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="0dp"
-                android:text="knmartinm@gmail.com" />
+                android:layout_marginTop="0dp" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -73,8 +72,7 @@
                 android:paddingStart="5dp"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="0dp"
-                android:layout_alignParentTop="true"
-                android:text="password123" />
+                android:layout_alignParentTop="true" />
 
             <Button
                 android:id="@+id/sign_in_button"
@@ -112,12 +110,11 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:src="@drawable/splash_logo"
+        android:layout_height="200dp"
+        android:id="@+id/app_logo"
+        android:foregroundGravity="center"
+        android:src="@drawable/logo"
         android:layout_marginRight="0dp"
         android:layout_below="@+id/login_progress"
-        android:layout_alignEnd="@+id/login_form"
-        android:contentDescription="application logo" />
-
+        android:layout_alignEnd="@+id/login_form"></ImageView>
 </RelativeLayout>

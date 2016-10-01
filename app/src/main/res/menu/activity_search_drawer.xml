@@ -16,4 +16,16 @@
             android:title="History" />
     </group>
 
+    <group android:menuCategory="secondary">
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Opciones" />
+        <item
+            android:id="@+id/copyright"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Copyright" />
+    </group>
+
+
 </menu>

@@ -80,18 +80,14 @@ public class ClinicsListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.e("GGGGGGGGGGGGGGGGGGG", "CHARGING AGAIN");
         Holder holder = new Holder();
         View row;
         row = LayoutInflater.from(parent.getContext()).inflate(R.layout.clinic_item, parent, false);
         holder.picture = (ImageView) row.findViewById(R.id.clinic_picture);
-//        new DownloadImageTask((ImageView) row.findViewById(R.id.clinic_picture))
-//                .execute(clinics.get(position).getImage());
         if (holder.picture == null) {
-            holder.picture = new ImageView(mContext);//(ImageView) row.findViewById(R.id.clinic_picture);
+            holder.picture = new ImageView(mContext);
         }
-        Picasso.with(mContext).load(clinics.get(position).getImage()).resize(1100,300).into(holder.picture);
-//        holder.picture.setImageDrawable(mContext.getResources().getDrawable(R.drawable.clinic_placeholder));
+        Picasso.with(mContext).load(clinics.get(position).getImage()).resize(1200,280).into(holder.picture);
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

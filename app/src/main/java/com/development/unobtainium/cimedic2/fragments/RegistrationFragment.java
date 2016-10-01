@@ -79,6 +79,7 @@ public class RegistrationFragment extends Fragment {
     private ImageView patientPicture;
     final Gson gson = new Gson();
     private File picture = null;
+    private String relationship_id;
     Calendar myCalendar = Calendar.getInstance();
     MultipartBody.Part body;
     RequestBody requestFile;
@@ -133,7 +134,8 @@ public class RegistrationFragment extends Fragment {
         final Spinner docTypeSpinner = (Spinner) getView().findViewById(R.id.doc_type_spinner);
         Spinner departmentSpinner = (Spinner) getView().findViewById(R.id.department_spinner);
         final Spinner districtSpinner = (Spinner) getView().findViewById(R.id.district_spinner);
-        CheckBox termsCheckbox = (CheckBox) getView().findViewById(R.id.terms_checkbox);
+        final CheckBox termsCheckbox = (CheckBox) getView().findViewById(R.id.terms_checkbox);
+        final Spinner relationshipSpinner = (Spinner) getView().findViewById(R.id.relationship_spinner);
         Button registerButton = (Button) getView().findViewById(R.id.register_button);
 
         if (getArguments() != null) {
@@ -143,26 +145,34 @@ public class RegistrationFragment extends Fragment {
             }
         }
 
-        ArrayAdapter<CharSequence> docTypes = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.doc_types_array, R.layout.support_simple_spinner_dropdown_item);
-        ArrayAdapter<CharSequence> departments = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.departments_array, R.layout.support_simple_spinner_dropdown_item);
-        ArrayAdapter<CharSequence> districts = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.districts_array, R.layout.support_simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> docTypes = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.doc_types_array, R.layout.spinner_item);
+        ArrayAdapter<CharSequence> departments = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.departments_array, R.layout.spinner_item);
+        ArrayAdapter<CharSequence> districts = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.districts_array, R.layout.spinner_item);
+        ArrayAdapter<CharSequence> relationships = ArrayAdapter.createFromResource(getActivity().getApplicationContext(), R.array.relationsips_array, R.layout.spinner_item);
 
         docTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         departments.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         districts.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        relationships.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         docTypeSpinner.setAdapter(docTypes);
         departmentSpinner.setAdapter(departments);
         districtSpinner.setAdapter(districts);
+        relationshipSpinner.setAdapter(relationships);
 
         assert registerButton != null;
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                patient = new Patient(namesInput.getText().toString(), lastNameInput.getText().toString(), mothersLastNameInput.getText().toString(), bithdayInput.getText().toString(), districtSpinner.getSelectedItemPosition()+1, documentNumberInput.getText().toString(), docTypeSpinner.getSelectedItemPosition()+1, addressInput.getText().toString(), emailInput.getText().toString(), passwordInput.getText().toString());
-                showProgress(true);
-                mRegisterTask = new PatientRegisterTask(patient);
-                mRegisterTask.execute((Void) null);
+                if (termsCheckbox.isChecked()){
+                    relationship_id = String.valueOf(relationshipSpinner.getSelectedItemPosition()+1);
+                    patient = new Patient(namesInput.getText().toString(), lastNameInput.getText().toString(), mothersLastNameInput.getText().toString(), bithdayInput.getText().toString(), districtSpinner.getSelectedItemPosition()+1, documentNumberInput.getText().toString(), docTypeSpinner.getSelectedItemPosition()+1, addressInput.getText().toString(), emailInput.getText().toString(), passwordInput.getText().toString());
+                    showProgress(true);
+                    mRegisterTask = new PatientRegisterTask(patient, relationship_id);
+                    mRegisterTask.execute((Void) null);
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Debe aceptar los términos de uso", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -260,9 +270,11 @@ public class RegistrationFragment extends Fragment {
     public class PatientRegisterTask extends AsyncTask<Void, Void, Boolean> {
         final Context context = getActivity().getApplicationContext();
         final Patient mPatient;
+        final String relationship;
 
-        PatientRegisterTask(Patient patient) {
+        PatientRegisterTask(Patient patient, String relationship_id) {
             mPatient = patient;
+            relationship = relationship_id;
         }
 
         @Override
@@ -292,8 +304,9 @@ public class RegistrationFragment extends Fragment {
             RequestBody address = RequestBody.create(MediaType.parse("text/plain"), patient.getAddress());
             RequestBody email = RequestBody.create(MediaType.parse("text/plain"), patient.getEmail());
             RequestBody password = RequestBody.create(MediaType.parse("text/plain"), patient.getPassword());
+            RequestBody relationship_id = RequestBody.create(MediaType.parse("text/plain"), relationship);
 
-            final Call<PatientResponse> call = apiService.registerPatient(getArguments().getString(PATIENT_ID), body, names, last_name, mothers_last_name, birthday, district_id, document_number, document_type, address, email, password);
+            final Call<PatientResponse> call = apiService.registerPatient(getArguments().getString(PATIENT_ID), body, names, last_name, mothers_last_name, birthday, district_id, document_number, document_type, address, email, password, relationship_id);
             try {
                 Response<PatientResponse> response = call.execute();
                 loggedPatient = response.body().patient;
@@ -316,6 +329,7 @@ public class RegistrationFragment extends Fragment {
                     if (getActivity() instanceof RegistrationActivity){
                         PatientSessionManager psm = new PatientSessionManager(context);
                         psm.createPatientLoginSession(loggedPatient.getId(), loggedPatient.getEmail(), loggedPatient.getNames(), loggedPatient.getImage());
+                        Toast.makeText(getActivity().getApplicationContext(), "Correctamente registrado", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getContext(), SearchActivity.class));
                     } else {
                         FragmentManager fm = getFragmentManager();

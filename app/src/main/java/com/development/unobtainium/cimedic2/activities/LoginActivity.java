@@ -3,6 +3,8 @@ package com.development.unobtainium.cimedic2.activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Path;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -19,6 +21,7 @@ import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +63,7 @@ public class LoginActivity extends AppCompatActivity implements SearchFragment.O
     private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
+    private ImageView logoView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +72,9 @@ public class LoginActivity extends AppCompatActivity implements SearchFragment.O
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.email);
-
-        mPasswordView = (EditText) findViewById(R.id.password);
+//        logoView = (ImageView) findViewById(R.id.app_logo);
+//        logoView.setImageDrawable(getResources().getDrawable(R.drawable.splash_logo, getTheme()));
+       mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -98,7 +103,7 @@ public class LoginActivity extends AppCompatActivity implements SearchFragment.O
             }
         });
         mProgressView = findViewById(R.id.login_progress);
-
+        showProgress(false);
         PatientSessionManager usm = PatientSessionManager.getInstance(getApplicationContext());
 //        if (usm.isUserLoggedIn()){
 //            Intent intent = new Intent(getApplicationContext(), ChoosingActivity.class);

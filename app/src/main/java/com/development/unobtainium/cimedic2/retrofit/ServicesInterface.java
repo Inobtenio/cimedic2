@@ -39,7 +39,8 @@ public interface ServicesInterface {
                                           @Part("patient[document_type]") RequestBody document_type,
                                           @Part("patient[address]") RequestBody address,
                                           @Part("patient[email]") RequestBody email,
-                                          @Part("patient[password]") RequestBody password);
+                                          @Part("patient[password]") RequestBody password,
+                                          @Part("patient[relationship_id]") RequestBody relationship_id);
 
     @GET("relatives")
     Call<RelativesResponse> getRelatives(@Header("Authorization") String authorization);

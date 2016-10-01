@@ -31,6 +31,10 @@ import com.squareup.picasso.Transformation;
 public class SearchActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.OnFragmentInteractionListener, PatientsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, RegistrationFragment.OnFragmentInteractionListener, SpecialtiesFragment.OnFragmentInteractionListener {
 
+    private ImageView currentPatientPicture;
+    private String imageUrl;
+    private TextView currentPatientEmail;
+    private TextView currentPatientName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +53,27 @@ public class SearchActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        PatientSessionManager psm = PatientSessionManager.getInstance(getApplicationContext());
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        TextView currentPatientEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.patientEmail);
-        TextView currentPatientName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.patientName);
-        ImageView currentPatientPicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.patientPicture);
-        currentPatientName.setText(psm.getLoggedPatientName());
-        currentPatientEmail.setText(psm.getLoggedPatientEmail());
-        String imageUrl = PatientSessionManager.getInstance(getApplicationContext()).getLoggedPatientImage();
+        currentPatientEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.patientEmail);
+        currentPatientName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.patientName);
+        currentPatientPicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.patientPicture);
+        updateProfilePicture();
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void updateProfilePicture(){
+        PatientSessionManager psm = PatientSessionManager.getInstance(getApplicationContext());
+        imageUrl = psm.getLoggedPatientImage();
         if (!imageUrl.equals("")) {
             Transformation transformation = new RoundedTransformationBuilder()
                     .cornerRadiusDp(45)
@@ -70,18 +87,8 @@ public class SearchActivity extends AppCompatActivity
         } else {
             currentPatientPicture.setImageDrawable(getResources().getDrawable(R.drawable.patient_placeholder));
         };
-
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        currentPatientName.setText(psm.getLoggedPatientName());
+        currentPatientEmail.setText(psm.getLoggedPatientEmail());
     }
 
     @Override
