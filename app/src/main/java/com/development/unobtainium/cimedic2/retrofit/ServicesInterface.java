@@ -5,6 +5,8 @@ import com.development.unobtainium.cimedic2.models.Patient;
 import com.development.unobtainium.cimedic2.responses.ClinicsResponse;
 import com.development.unobtainium.cimedic2.responses.PatientResponse;
 import com.development.unobtainium.cimedic2.responses.RelativesResponse;
+import com.development.unobtainium.cimedic2.responses.SpecialtiesResponse;
+
 import okhttp3.RequestBody;
 
 import java.io.File;
@@ -18,6 +20,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -47,4 +50,7 @@ public interface ServicesInterface {
 
     @GET("clinics")
     Call<ClinicsResponse> getClinics(@Header("Authorization") String authorization);
+
+    @GET("clinics/{clinic_id}/specialties")
+    Call<SpecialtiesResponse> getSpecialties(@Header("Authorization") String authorization, @Path("clinic_id") String clinic_id);
 }

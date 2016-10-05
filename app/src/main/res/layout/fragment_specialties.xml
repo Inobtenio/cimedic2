@@ -5,9 +5,27 @@
     tools:context=".fragments.SpecialtiesFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/specialties_progress"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="false" />
+
+    <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Selected clinic specialties will go here" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/specialties_grid"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="40dp"
+        android:stretchMode="columnWidth"
+        android:scrollbars="none"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false"
+        android:layout_gravity="right|bottom" />
 
 </FrameLayout>

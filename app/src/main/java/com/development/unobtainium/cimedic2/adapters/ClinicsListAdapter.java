@@ -79,7 +79,7 @@ public class ClinicsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         Holder holder = new Holder();
         View row;
         row = LayoutInflater.from(parent.getContext()).inflate(R.layout.clinic_item, parent, false);
@@ -93,7 +93,8 @@ public class ClinicsListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 FragmentManager fm = ((Activity) mContext).getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                SpecialtiesFragment llf = new SpecialtiesFragment();
+                Log.e("BBBBBBBBBB", String.valueOf(clinics.get(position).getId()));
+                SpecialtiesFragment llf = SpecialtiesFragment.newInstance(clinics.get(position).getId());
                 ft.replace(R.id.currentFragment, llf);
                 ft.commit();
             }

@@ -2,13 +2,31 @@ package com.development.unobtainium.cimedic2.fragments;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.Toast;
 
 import com.development.unobtainium.cimedic2.R;
+import com.development.unobtainium.cimedic2.adapters.SpecialtiesTableAdapter;
+import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
+import com.development.unobtainium.cimedic2.models.Specialty;
+import com.development.unobtainium.cimedic2.responses.SpecialtiesResponse;
+import com.development.unobtainium.cimedic2.retrofit.ServiceError;
+import com.development.unobtainium.cimedic2.retrofit.ServicesInterface;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,9 +40,17 @@ public class SpecialtiesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String CLINIC_ID = "clinic_id";
+    private SpecialtiesTask mSpecialtiesTask = null;
+    final String api_endpoint = "https://medic-1.herokuapp.com/api/v1/"; //"http://192.168.1.105:3000/api/v1/";
+    private ArrayList<Specialty> specialties;
+    private ServiceError sError;
+    private String error = "";
+    private View mProgressView;
+    Gson gson;
+    GridView gridView;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String clinic_id;
 
     private OnFragmentInteractionListener mListener;
 
@@ -45,8 +71,75 @@ public class SpecialtiesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(CLINIC_ID);
+            clinic_id = String.valueOf(getArguments().getInt(CLINIC_ID));
         }
+    }
+
+    public class SpecialtiesTask extends AsyncTask<Void, Void, Boolean> {
+        final Context context = getContext();
+
+        SpecialtiesTask() {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            final String BASE_URL = api_endpoint;
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            ServicesInterface apiService =
+                    retrofit.create(ServicesInterface.class);
+
+            final Call<SpecialtiesResponse> call = apiService.getSpecialties(PatientSessionManager.getInstance(getContext()).getLoggedPatientId(), clinic_id);
+            try {
+                Response<SpecialtiesResponse> response = call.execute();
+                specialties = response.body().specialties;
+                sError = response.body().error;
+            } catch (IOException e) {
+                error = e.getMessage();
+            }
+            return error.isEmpty();
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mSpecialtiesTask = null;
+            showProgress(false);
+
+            if (success) {
+                if (sError == null){
+                    gridView.setAdapter(new SpecialtiesTableAdapter(getContext(), specialties) );
+                } else {
+                    Toast.makeText(getContext(), sError.getDescription(), Toast.LENGTH_SHORT).show();
+                }
+            } else{
+                Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mSpecialtiesTask = null;
+            showProgress(false);
+        }
+    }
+
+    private void showProgress(final boolean show) {
+        mProgressView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        mProgressView = getView().findViewById(R.id.specialties_progress);
+        gridView = (GridView) getView().findViewById(R.id.specialties_grid);
+        showProgress(true);
+        mSpecialtiesTask = new SpecialtiesTask();
+        mSpecialtiesTask.execute((Void) null);
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
