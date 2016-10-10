@@ -2,24 +2,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SpecialtiesFragment">
+    tools:context="com.development.unobtainium.cimedic2.fragments.DoctorsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/specialties_progress"
+        android:id="@+id/doctors_progress"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:indeterminate="false" />
 
-    <GridView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/specialties_grid"
-        android:numColumns="auto_fit"
-        android:verticalSpacing="10dp"
-        android:horizontalSpacing="0dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/doctors_list"
+        android:verticalSpacing="40dp"
         android:stretchMode="columnWidth"
         android:scrollbars="none"
         android:layout_alignParentStart="true"

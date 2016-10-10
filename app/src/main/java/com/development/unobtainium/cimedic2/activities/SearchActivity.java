@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.development.unobtainium.cimedic2.fragments.DoctorsFragment;
 import com.development.unobtainium.cimedic2.fragments.HistoryFragment;
 import com.development.unobtainium.cimedic2.R;
 import com.development.unobtainium.cimedic2.fragments.PatientsFragment;
@@ -29,7 +30,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 public class SearchActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.OnFragmentInteractionListener, PatientsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, RegistrationFragment.OnFragmentInteractionListener, SpecialtiesFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.OnFragmentInteractionListener, PatientsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, RegistrationFragment.OnFragmentInteractionListener, SpecialtiesFragment.OnFragmentInteractionListener, DoctorsFragment.OnFragmentInteractionListener {
 
     private ImageView currentPatientPicture;
     private String imageUrl;

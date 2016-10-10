@@ -10,7 +10,8 @@
         android:background="@drawable/clinic_placeholder"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,5 +21,6 @@
         android:id="@+id/specialty_name"
         android:layout_below="@+id/patient_photo"
         android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

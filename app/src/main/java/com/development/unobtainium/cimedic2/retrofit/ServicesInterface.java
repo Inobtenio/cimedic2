@@ -3,6 +3,7 @@ package com.development.unobtainium.cimedic2.retrofit;
 
 import com.development.unobtainium.cimedic2.models.Patient;
 import com.development.unobtainium.cimedic2.responses.ClinicsResponse;
+import com.development.unobtainium.cimedic2.responses.DoctorsResponse;
 import com.development.unobtainium.cimedic2.responses.PatientResponse;
 import com.development.unobtainium.cimedic2.responses.RelativesResponse;
 import com.development.unobtainium.cimedic2.responses.SpecialtiesResponse;
@@ -53,4 +54,7 @@ public interface ServicesInterface {
 
     @GET("clinics/{clinic_id}/specialties")
     Call<SpecialtiesResponse> getSpecialties(@Header("Authorization") String authorization, @Path("clinic_id") String clinic_id);
+
+    @GET("clinics/{clinic_id}/specialties/{specialty_id}/doctors")
+    Call<DoctorsResponse> getDoctors(@Header("Authorization") String authorization, @Path("clinic_id") String clinic_id, @Path("specialty_id") String specialty_id);
 }
