@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +12,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.development.unobtainium.cimedic2.R;
+import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
+import com.development.unobtainium.cimedic2.models.Schedule;
+import com.development.unobtainium.cimedic2.responses.SchedulesResponse;
 import com.development.unobtainium.cimedic2.retrofit.ServiceError;
 import com.development.unobtainium.cimedic2.retrofit.ServicesInterface;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -37,7 +43,7 @@ public class SchedulesFragment extends Fragment {
     private static final String DOCTOR_ID = "doctor_id";
     private SchedulesTask mSchedulesTask = null;
     final String api_endpoint = "https://medic-1.herokuapp.com/api/v1/"; //"http://192.168.1.105:3000/api/v1/";
-//    private ArrayList<Doctor> doctors;
+    private ArrayList<Schedule> schedules;
     private ServiceError sError;
     private String error = "";
     private View mProgressView;
@@ -96,10 +102,10 @@ public class SchedulesFragment extends Fragment {
             ServicesInterface apiService =
                     retrofit.create(ServicesInterface.class);
 
-            final Call<DoctorsResponse> call = apiService.getDoctors(PatientSessionManager.getInstance(getContext()).getLoggedPatientId(), clinic_id, specialty_id);
+            final Call<SchedulesResponse> call = apiService.getSchedules(PatientSessionManager.getInstance(getContext()).getLoggedPatientId(), clinic_id, specialty_id, doctor_id);
             try {
-                Response<DoctorsResponse> response = call.execute();
-                doctors = response.body().doctors;
+                Response<SchedulesResponse> response = call.execute();
+                schedules = response.body().schedules;
                 sError = response.body().error;
             } catch (IOException e) {
                 error = e.getMessage();
@@ -114,7 +120,7 @@ public class SchedulesFragment extends Fragment {
 
             if (success) {
                 if (sError == null){
-
+                    Toast.makeText(getContext(), gson.toJson(schedules), Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getContext(), sError.getDescription(), Toast.LENGTH_SHORT).show();
                 }
@@ -136,8 +142,8 @@ public class SchedulesFragment extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        mProgressView = getView().findViewById(R.id.doctors_progress);
-        listView = (ListView) getView().findViewById(R.id.doctors_list);
+        mProgressView = getView().findViewById(R.id.schedules_progress);
+//        listView = (ListView) getView().findViewById(R.id.doctors_list);
         showProgress(true);
         mSchedulesTask = new SchedulesTask();
         mSchedulesTask.execute((Void) null);

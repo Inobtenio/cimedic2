@@ -6,6 +6,7 @@ import com.development.unobtainium.cimedic2.responses.ClinicsResponse;
 import com.development.unobtainium.cimedic2.responses.DoctorsResponse;
 import com.development.unobtainium.cimedic2.responses.PatientResponse;
 import com.development.unobtainium.cimedic2.responses.RelativesResponse;
+import com.development.unobtainium.cimedic2.responses.SchedulesResponse;
 import com.development.unobtainium.cimedic2.responses.SpecialtiesResponse;
 
 import okhttp3.RequestBody;

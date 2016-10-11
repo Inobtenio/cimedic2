@@ -22,6 +22,7 @@ import com.development.unobtainium.cimedic2.fragments.HistoryFragment;
 import com.development.unobtainium.cimedic2.R;
 import com.development.unobtainium.cimedic2.fragments.PatientsFragment;
 import com.development.unobtainium.cimedic2.fragments.RegistrationFragment;
+import com.development.unobtainium.cimedic2.fragments.SchedulesFragment;
 import com.development.unobtainium.cimedic2.fragments.SearchFragment;
 import com.development.unobtainium.cimedic2.fragments.SpecialtiesFragment;
 import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
@@ -30,7 +31,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 public class SearchActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.OnFragmentInteractionListener, PatientsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, RegistrationFragment.OnFragmentInteractionListener, SpecialtiesFragment.OnFragmentInteractionListener, DoctorsFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.OnFragmentInteractionListener, PatientsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, RegistrationFragment.OnFragmentInteractionListener, SpecialtiesFragment.OnFragmentInteractionListener, DoctorsFragment.OnFragmentInteractionListener, SchedulesFragment.OnFragmentInteractionListener {
 
     private ImageView currentPatientPicture;
     private String imageUrl;
