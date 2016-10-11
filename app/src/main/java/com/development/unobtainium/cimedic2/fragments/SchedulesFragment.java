@@ -4,7 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,63 +12,58 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.development.unobtainium.cimedic2.R;
-import com.development.unobtainium.cimedic2.adapters.DoctorsListAdapter;
-import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
-import com.development.unobtainium.cimedic2.models.Doctor;
-import com.development.unobtainium.cimedic2.responses.DoctorsResponse;
 import com.development.unobtainium.cimedic2.retrofit.ServiceError;
 import com.development.unobtainium.cimedic2.retrofit.ServicesInterface;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DoctorsFragment.OnFragmentInteractionListener} interface
+ * {@link SchedulesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DoctorsFragment#newInstance} factory method to
+ * Use the {@link SchedulesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DoctorsFragment extends Fragment {
+public class SchedulesFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String CLINIC_ID = "clinic_id";
     private static final String SPECIALTY_ID = "specialty_id";
-    private DoctorsTask mDoctorsTask = null;
+    private static final String DOCTOR_ID = "doctor_id";
+    private SchedulesTask mSchedulesTask = null;
     final String api_endpoint = "https://medic-1.herokuapp.com/api/v1/"; //"http://192.168.1.105:3000/api/v1/";
-    private ArrayList<Doctor> doctors;
+//    private ArrayList<Doctor> doctors;
     private ServiceError sError;
     private String error = "";
     private View mProgressView;
     Gson gson;
     ListView listView;
-    private static DoctorsFragment dFragment;
 
     // TODO: Rename and change types of parameters
     private String clinic_id;
     private String specialty_id;
+    private String doctor_id;
 
     private OnFragmentInteractionListener mListener;
 
-    public DoctorsFragment() {
+    public SchedulesFragment() {
         // Required empty public constructor
     }
 
+
     // TODO: Rename and change types and number of parameters
-    public static DoctorsFragment newInstance(Integer clinic_id, Integer specialty_id) {
-        DoctorsFragment fragment = new DoctorsFragment();
+    public static SchedulesFragment newInstance(Integer clinic_id, Integer specialty_id, Integer doctor_id) {
+        SchedulesFragment fragment = new SchedulesFragment();
         Bundle args = new Bundle();
         args.putInt(CLINIC_ID, clinic_id);
         args.putInt(SPECIALTY_ID, specialty_id);
+        args.putInt(DOCTOR_ID, doctor_id);
         fragment.setArguments(args);
-        dFragment = fragment;
         return fragment;
     }
 
@@ -78,13 +73,14 @@ public class DoctorsFragment extends Fragment {
         if (getArguments() != null) {
             clinic_id = String.valueOf(getArguments().getInt(CLINIC_ID));
             specialty_id = String.valueOf(getArguments().getInt(SPECIALTY_ID));
+            doctor_id = String.valueOf(getArguments().getInt(DOCTOR_ID));
         }
     }
 
-    public class DoctorsTask extends AsyncTask<Void, Void, Boolean> {
+    public class SchedulesTask extends AsyncTask<Void, Void, Boolean> {
         final Context context = getContext();
 
-        DoctorsTask() {
+        SchedulesTask() {
         }
 
         @Override
@@ -113,12 +109,12 @@ public class DoctorsFragment extends Fragment {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            mDoctorsTask = null;
+            mSchedulesTask = null;
             showProgress(false);
 
             if (success) {
                 if (sError == null){
-                    listView.setAdapter(new DoctorsListAdapter(dFragment, getContext(), doctors) );
+
                 } else {
                     Toast.makeText(getContext(), sError.getDescription(), Toast.LENGTH_SHORT).show();
                 }
@@ -129,7 +125,7 @@ public class DoctorsFragment extends Fragment {
 
         @Override
         protected void onCancelled() {
-            mDoctorsTask = null;
+            mSchedulesTask = null;
             showProgress(false);
         }
     }
@@ -143,8 +139,8 @@ public class DoctorsFragment extends Fragment {
         mProgressView = getView().findViewById(R.id.doctors_progress);
         listView = (ListView) getView().findViewById(R.id.doctors_list);
         showProgress(true);
-        mDoctorsTask = new DoctorsTask();
-        mDoctorsTask.execute((Void) null);
+        mSchedulesTask = new SchedulesTask();
+        mSchedulesTask.execute((Void) null);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -152,7 +148,7 @@ public class DoctorsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_doctors, container, false);
+        return inflater.inflate(R.layout.fragment_schedules, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

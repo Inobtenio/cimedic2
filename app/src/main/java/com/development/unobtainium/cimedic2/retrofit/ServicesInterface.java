@@ -57,4 +57,7 @@ public interface ServicesInterface {
 
     @GET("clinics/{clinic_id}/specialties/{specialty_id}/doctors")
     Call<DoctorsResponse> getDoctors(@Header("Authorization") String authorization, @Path("clinic_id") String clinic_id, @Path("specialty_id") String specialty_id);
+
+    @GET("clinics/{clinic_id}/specialties/{specialty_id}/doctors/{doctor_id}/schedules")
+    Call<SchedulesResponse> getSchedules(@Header("Authorization") String authorization, @Path("clinic_id") String clinic_id, @Path("specialty_id") String specialty_id, @Path("doctor_id") String doctor_id);
 }
