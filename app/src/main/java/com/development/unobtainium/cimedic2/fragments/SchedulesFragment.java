@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +14,25 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.development.unobtainium.cimedic2.R;
+import com.development.unobtainium.cimedic2.adapters.SchedulesListAdapter;
 import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
 import com.development.unobtainium.cimedic2.models.Schedule;
 import com.development.unobtainium.cimedic2.responses.SchedulesResponse;
 import com.development.unobtainium.cimedic2.retrofit.ServiceError;
 import com.development.unobtainium.cimedic2.retrofit.ServicesInterface;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -120,7 +132,30 @@ public class SchedulesFragment extends Fragment {
 
             if (success) {
                 if (sError == null){
-                    Toast.makeText(getContext(), gson.toJson(schedules), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getContext(), gson.toJson(schedules), Toast.LENGTH_LONG).show();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    Multimap<String, Schedule> map = HashMultimap.create();
+                    for (Schedule schedule : schedules){
+                        SimpleDateFormat format1=new SimpleDateFormat("dd/MM/yyyy");
+                        Date dt1= null;
+                        try {
+                            dt1 = format1.parse(schedule.getStart());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        DateFormat format2=new SimpleDateFormat("EEEE");
+                        String day=format2.format(dt1);
+                        map.put(day, schedule);
+                    }
+                    Set keySet = map.keySet();
+                    Iterator keyIterator = keySet.iterator();
+                    while (keyIterator.hasNext() ) {
+                        String key = (String) keyIterator.next();
+                        Collection<Schedule> values = map.get(key);
+                        Log.e("DDDDDDDDDDD", key);
+                        listView = (ListView) getView().findViewById(getResources().getIdentifier(key, "id", getActivity().getPackageName()));
+                        listView.setAdapter(new SchedulesListAdapter(getContext(), new ArrayList<Schedule>(values )) );
+                    }
                 } else {
                     Toast.makeText(getContext(), sError.getDescription(), Toast.LENGTH_SHORT).show();
                 }

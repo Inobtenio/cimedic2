@@ -29,10 +29,10 @@ public class DoctorsListAdapter extends BaseAdapter {
     private DoctorsFragment dFragment;
     private ArrayList<Doctor> doctorsList = new ArrayList<Doctor>();
 
-    public DoctorsListAdapter(DoctorsFragment fragment, Context mContext, ArrayList<Doctor> specialtiesList) {
+    public DoctorsListAdapter(DoctorsFragment fragment, Context mContext, ArrayList<Doctor> doctorsList) {
         this.mContext = mContext;
         this.dFragment = fragment;
-        this.doctorsList = specialtiesList;
+        this.doctorsList = doctorsList;
     }
 
 
