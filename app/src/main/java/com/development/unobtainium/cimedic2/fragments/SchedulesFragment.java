@@ -29,10 +29,14 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -133,18 +137,10 @@ public class SchedulesFragment extends Fragment {
             if (success) {
                 if (sError == null){
 //                    Toast.makeText(getContext(), gson.toJson(schedules), Toast.LENGTH_LONG).show();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     Multimap<String, Schedule> map = HashMultimap.create();
                     for (Schedule schedule : schedules){
-                        SimpleDateFormat format1=new SimpleDateFormat("dd/MM/yyyy");
-                        Date dt1= null;
-                        try {
-                            dt1 = format1.parse(schedule.getStart());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        DateFormat format2=new SimpleDateFormat("EEEE");
-                        String day=format2.format(dt1);
+                        String day = schedule.hashKey();
+
                         map.put(day, schedule);
                     }
                     Set keySet = map.keySet();
@@ -152,9 +148,11 @@ public class SchedulesFragment extends Fragment {
                     while (keyIterator.hasNext() ) {
                         String key = (String) keyIterator.next();
                         Collection<Schedule> values = map.get(key);
-                        Log.e("DDDDDDDDDDD", key);
+//                        Collections.sort((List) values);
                         listView = (ListView) getView().findViewById(getResources().getIdentifier(key, "id", getActivity().getPackageName()));
-                        listView.setAdapter(new SchedulesListAdapter(getContext(), new ArrayList<Schedule>(values )) );
+                        if (listView != null){
+                            listView.setAdapter(new SchedulesListAdapter(getContext(), new ArrayList<Schedule>(values)));
+                        }
                     }
                 } else {
                     Toast.makeText(getContext(), sError.getDescription(), Toast.LENGTH_SHORT).show();

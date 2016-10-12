@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import com.development.unobtainium.cimedic2.fragments.SchedulesFragment;
 import com.development.unobtainium.cimedic2.models.Schedule;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Kevin on 10/11/16.
@@ -27,6 +30,14 @@ public class SchedulesListAdapter extends BaseAdapter {
     public SchedulesListAdapter(Context mContext, ArrayList<Schedule> schedulesList) {
         this.mContext = mContext;
 //        this.dFragment = fragment;
+//        if (schedulesList.size() > 1) {
+//            Collections.sort(schedulesList, new Comparator<Schedule>() {
+//                public int compare(Schedule sch1, Schedule sch2) {
+//                    // ## Ascending order
+//                    return Integer.getInteger(sch1.getStart()) - Integer.getInteger(sch2.getStart());
+//                }
+//            });
+//        }
         this.schedulesList = schedulesList;
     }
 
@@ -56,7 +67,11 @@ public class SchedulesListAdapter extends BaseAdapter {
         row = LayoutInflater.from(parent.getContext()).inflate(R.layout.schedule_item, parent, false);
 //        String loggedPatientId = PatientSessionManager.getInstance(parent.getContext()).getLoggedPatientId();
         holder.text = (TextView) row.findViewById(R.id.scheduleText);
-        holder.text.setText(schedulesList.get(position).getEnd());
+        holder.text.setText(schedulesList.get(position).hoursString());
+        if (schedulesList.get(position).taken){
+            row.setBackgroundColor(Color.parseColor("#FB0D1B"));
+            holder.text.setTextColor(Color.WHITE);
+        }
 //        row.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
