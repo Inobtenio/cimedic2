@@ -7,6 +7,7 @@ import java.io.File;
  */
 public class Patient {
     private Integer id = 0;
+    private Boolean principal = false;
     private String names;
     private String last_name;
     private String mothers_last_name;
@@ -16,16 +17,25 @@ public class Patient {
     private int document_type;
     private String address;
     private String email;
+    private String password;
+    private String image;
+    private File picture;
 
     public String getPassword() {
         return password;
     }
 
+    public Boolean getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(Boolean principal) {
+        this.principal = principal;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
-
-    private String password;
 
     public String getImage() {
         return image;
@@ -34,9 +44,6 @@ public class Patient {
     public void setImage(String image) {
         this.image = image;
     }
-
-    private String image;
-    private File picture;
 
     public void setPicture(File picture) {
         this.picture = picture;

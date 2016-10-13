@@ -66,10 +66,12 @@ import retrofit2.Retrofit;
 public class RegistrationFragment extends Fragment {
     private static final String SHOW_PASSWORD = "show_password";
     private static final String PATIENT_ID = "patient_id";
+    private static final String EDIT_PATIENT_ID = "edit_patient_id";
     private OnFragmentInteractionListener mListener;
     private PatientRegisterTask mRegisterTask = null;
     final String api_endpoint = "https://medic-1.herokuapp.com/api/v1/patients/"; //"http://192.168.1.105:3000/api/v1/patients/";
     private Patient loggedPatient;
+    private Patient editingPatient;
     private Patient patient;
     private Boolean authenticated = false;
     private ServiceError sError;
@@ -88,7 +90,21 @@ public class RegistrationFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RegistrationFragment newInstance(Boolean show, String id) {
+    public static RegistrationFragment newInstance(Patient patient, Boolean show, String id, Boolean edit) {
+        RegistrationFragment fragment = new RegistrationFragment();
+        Bundle args = new Bundle();
+        fragment.editingPatient = patient;
+        args.putBoolean(SHOW_PASSWORD, show);
+        if (edit){
+            args.putString(EDIT_PATIENT_ID, id);
+        } else {
+            args.putString(PATIENT_ID, id);
+        }
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static RegistrationFragment newEditInstance(Boolean show, String id){
         RegistrationFragment fragment = new RegistrationFragment();
         Bundle args = new Bundle();
         args.putBoolean(SHOW_PASSWORD, show);
@@ -160,11 +176,38 @@ public class RegistrationFragment extends Fragment {
         districtSpinner.setAdapter(districts);
         relationshipSpinner.setAdapter(relationships);
 
+        if (editingPatient != null){
+            if (!editingPatient.getImage().equals("")) {
+                Transformation transformation = new RoundedTransformationBuilder()
+                        .cornerRadiusDp(60)
+                        .oval(true)
+                        .build();
+                Picasso.with(getContext())
+                        .load(editingPatient.getImage())
+                        .fit().centerCrop()
+                        .transform(transformation)
+                        .into(patientPicture);
+            } else {
+                patientPicture.setImageDrawable(getResources().getDrawable(R.drawable.patient_placeholder));
+            };
+            namesInput.setText(editingPatient.getNames());
+            lastNameInput.setText(editingPatient.getLast_name());
+            mothersLastNameInput.setText(editingPatient.getMothers_last_name());
+            bithdayInput.setText(editingPatient.getBirthday());
+            docTypeSpinner.setSelection(editingPatient.getDocument_type() - 1);
+            documentNumberInput.setText(editingPatient.getDocument_number());
+            districtSpinner.setSelection(editingPatient.getDistrict_id() - 1);
+            addressInput.setText(editingPatient.getAddress());
+            emailInput.setText(editingPatient.getEmail());
+            passwordInput.setText(editingPatient.getPassword());
+            termsCheckbox.setVisibility(View.INVISIBLE);
+        }
+
         assert registerButton != null;
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (termsCheckbox.isChecked()){
+                if (termsCheckbox.isChecked() || editingPatient != null){
                     relationship_id = String.valueOf(relationshipSpinner.getSelectedItemPosition()+1);
                     patient = new Patient(namesInput.getText().toString(), lastNameInput.getText().toString(), mothersLastNameInput.getText().toString(), bithdayInput.getText().toString(), districtSpinner.getSelectedItemPosition()+1, documentNumberInput.getText().toString(), docTypeSpinner.getSelectedItemPosition()+1, addressInput.getText().toString(), emailInput.getText().toString(), passwordInput.getText().toString());
                     showProgress(true);
@@ -257,8 +300,8 @@ public class RegistrationFragment extends Fragment {
 
     private void updateLabel() {
 
-        String myFormat = "EEE, dd MMM yyyy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, new Locale("es", "ES"));
 
         bithdayInput.setText(sdf.format(myCalendar.getTime()));
     }
@@ -306,15 +349,28 @@ public class RegistrationFragment extends Fragment {
             RequestBody password = RequestBody.create(MediaType.parse("text/plain"), patient.getPassword());
             RequestBody relationship_id = RequestBody.create(MediaType.parse("text/plain"), relationship);
 
-            final Call<PatientResponse> call = apiService.registerPatient(getArguments().getString(PATIENT_ID), body, names, last_name, mothers_last_name, birthday, district_id, document_number, document_type, address, email, password, relationship_id);
-            try {
-                Response<PatientResponse> response = call.execute();
-                loggedPatient = response.body().patient;
-                sError = response.body().error;
-                authenticated = true;
-            } catch (IOException e) {
-                error = e.getMessage();
-                authenticated = false;
+            if (getArguments().getString(EDIT_PATIENT_ID) == null) {
+                final Call<PatientResponse> call = apiService.registerPatient(getArguments().getString(PATIENT_ID), body, names, last_name, mothers_last_name, birthday, district_id, document_number, document_type, address, email, password, relationship_id);
+                try {
+                    Response<PatientResponse> response = call.execute();
+                    loggedPatient = response.body().patient;
+                    sError = response.body().error;
+                    authenticated = true;
+                } catch (IOException e) {
+                    error = e.getMessage();
+                    authenticated = false;
+                }
+            } else {
+                final Call<PatientResponse> call = apiService.editPatient(getArguments().getString(EDIT_PATIENT_ID), body, names, last_name, mothers_last_name, birthday, district_id, document_number, document_type, address, email, password);
+                try {
+                    Response<PatientResponse> response = call.execute();
+                    loggedPatient = response.body().patient;
+                    sError = response.body().error;
+                    authenticated = true;
+                } catch (IOException e) {
+                    error = e.getMessage();
+                    authenticated = false;
+                }
             }
             return authenticated;
         }
@@ -334,7 +390,7 @@ public class RegistrationFragment extends Fragment {
                     } else {
                         FragmentManager fm = getFragmentManager();
                         FragmentTransaction ft = fm.beginTransaction();
-
+                        Toast.makeText(getActivity().getApplicationContext(), "Correctamente guardado", Toast.LENGTH_SHORT).show();
                         PatientsFragment llf = new PatientsFragment();
                         ft.replace(R.id.currentFragment, llf);
                         ft.commit();

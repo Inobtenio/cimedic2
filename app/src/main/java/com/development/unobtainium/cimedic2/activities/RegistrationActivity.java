@@ -48,7 +48,7 @@ public class RegistrationActivity extends AppCompatActivity implements SearchFra
         setContentView(R.layout.activity_registration);
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        RegistrationFragment llf = RegistrationFragment.newInstance(true, new PatientSessionManager(getApplicationContext()).getLoggedPatientId());
+        RegistrationFragment llf = RegistrationFragment.newInstance(null, true, new PatientSessionManager(getApplicationContext()).getLoggedPatientId(), false);
         ft.replace(R.id.currentFragment, llf);
         ft.commit();
     }

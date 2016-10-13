@@ -8,14 +8,18 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.development.unobtainium.cimedic2.R;
 import com.development.unobtainium.cimedic2.activities.SearchActivity;
+import com.development.unobtainium.cimedic2.fragments.RegistrationFragment;
 import com.development.unobtainium.cimedic2.fragments.SearchFragment;
 import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
 import com.development.unobtainium.cimedic2.models.Patient;
@@ -109,6 +113,32 @@ public class PatientsTableAdapter extends BaseAdapter {
                 SearchFragment llf = new SearchFragment();
                 ft.replace(R.id.currentFragment, llf);
                 ft.commit();
+            }
+        });
+        cell.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                PopupMenu menu = new PopupMenu(mContext, v);
+                menu.getMenuInflater().inflate(R.menu.patient_actions, menu.getMenu());
+                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.patient_edit_action) {
+                            FragmentManager fm = ((Activity) mContext).getFragmentManager();
+                            FragmentTransaction ft = fm.beginTransaction();
+                            RegistrationFragment llf = RegistrationFragment.newInstance(patientList.get(position), patientList.get(position).getPrincipal(), String.valueOf(patientList.get(position).getId()) , true);
+                            ft.addToBackStack("main");
+                            ft.replace(R.id.currentFragment, llf);
+                            ft.commit();
+                        } else if (id == R.id.patient_delete_action) {
+                            Toast.makeText(mContext, "Aun no implementado", Toast.LENGTH_LONG).show();
+                        }
+                        return false;
+                    }
+                });
+                menu.show();
+                return true;
             }
         });
         return cell;

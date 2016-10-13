@@ -21,6 +21,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -46,6 +47,20 @@ public interface ServicesInterface {
                                           @Part("patient[email]") RequestBody email,
                                           @Part("patient[password]") RequestBody password,
                                           @Part("patient[relationship_id]") RequestBody relationship_id);
+
+    @Multipart
+    @PUT("update_info")
+    Call<PatientResponse> editPatient(@Header("Authorization") String authorization, @Part MultipartBody.Part picture,
+                                          @Part("patient[names]") RequestBody names,
+                                          @Part("patient[last_name]") RequestBody last_name,
+                                          @Part("patient[mothers_last_name]") RequestBody mothers_last_name,
+                                          @Part("patient[birthday]") RequestBody birthday,
+                                          @Part("patient[district_id]") RequestBody district_id,
+                                          @Part("patient[document_number]") RequestBody document_number,
+                                          @Part("patient[document_type]") RequestBody document_type,
+                                          @Part("patient[address]") RequestBody address,
+                                          @Part("patient[email]") RequestBody email,
+                                          @Part("patient[password]") RequestBody password);
 
     @GET("relatives")
     Call<RelativesResponse> getRelatives(@Header("Authorization") String authorization);

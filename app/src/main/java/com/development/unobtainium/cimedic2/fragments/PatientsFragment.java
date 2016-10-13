@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Gallery;
@@ -177,7 +179,7 @@ public class PatientsFragment extends Fragment {
             public void onClick(View view) {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                RegistrationFragment llf = RegistrationFragment.newInstance(false, new PatientSessionManager(getContext()).getLoggedPatientId());
+                RegistrationFragment llf = RegistrationFragment.newInstance(null, false, new PatientSessionManager(getContext()).getLoggedPatientId(), false);
                 ft.replace(R.id.currentFragment, llf);
                 ft.commit();
             }
