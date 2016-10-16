@@ -1,9 +1,11 @@
 package com.development.unobtainium.cimedic2.fragments;
 
+import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -44,7 +46,7 @@ import retrofit2.Retrofit;
  * Use the {@link PatientsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PatientsFragment extends Fragment {
+public class PatientsFragment extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,8 +57,11 @@ public class PatientsFragment extends Fragment {
     private ServiceError sError;
     private String error = "";
     private View mProgressView;
+    private PatientsFragment mFragment;
+    private AppointmentPreviewFragment appFragment;
     Gson gson;
     GridView gridView;
+    private Boolean showButton = true;
     FloatingActionButton fab;
 
     // TODO: Rename and change types of parameters
@@ -69,20 +74,13 @@ public class PatientsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PatientsFragment.
-     */
     // TODO: Rename and change types and number of parameters
-    public static PatientsFragment newInstance(String param1, String param2) {
+    public static PatientsFragment newInstance(Boolean show, AppointmentPreviewFragment aFragment) {
         PatientsFragment fragment = new PatientsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        fragment.showButton = show;
+        fragment.appFragment = aFragment;
+        fragment.mFragment = fragment;
         fragment.setArguments(args);
         return fragment;
     }
@@ -136,7 +134,7 @@ public class PatientsFragment extends Fragment {
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    startActivity(intent);
 //                    Log.d("PPPPPPPPPPPP", gson.toJson(patients));
-                    gridView.setAdapter(new PatientsTableAdapter(getContext(), patients) );
+                    gridView.setAdapter(new PatientsTableAdapter(getContext(), patients, showButton, mFragment, appFragment) );
                 } else {
                     Toast.makeText(getContext(), sError.getDescription(), Toast.LENGTH_SHORT).show();
                 }
@@ -184,7 +182,9 @@ public class PatientsFragment extends Fragment {
                 ft.commit();
             }
         });
-
+        if (!showButton){
+            fab.setVisibility(View.INVISIBLE);
+        }
         showProgress(true);
         mRelativesTask = new RelativesTask();
         mRelativesTask.execute((Void) null);

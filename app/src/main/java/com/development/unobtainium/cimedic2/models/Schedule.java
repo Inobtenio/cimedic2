@@ -1,5 +1,6 @@
 package com.development.unobtainium.cimedic2.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
@@ -29,6 +30,13 @@ public class Schedule implements Comparator<Schedule>{
         endCalendar.setTime(end);
         startCalendar.setTime(start);
         return String.valueOf(startCalendar.get(Calendar.HOUR_OF_DAY)) + ":" + String.valueOf(startCalendar.get(Calendar.MINUTE)) + " - " + String.valueOf(endCalendar.get(Calendar.HOUR_OF_DAY)) + ":" + String.valueOf(endCalendar.get(Calendar.MINUTE));
+    }
+
+    public String fullHoursString(){
+        Date date = new Date(Integer.valueOf(this.getStart())*1000L);
+        String myFormat = "EEE, dd MMM yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
+        return sdf.format(date) + "  " + hoursString();
     }
 
     public Integer getId() {

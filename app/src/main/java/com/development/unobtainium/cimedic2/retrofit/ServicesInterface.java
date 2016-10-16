@@ -1,9 +1,12 @@
 package com.development.unobtainium.cimedic2.retrofit;
 
 
+import com.development.unobtainium.cimedic2.models.Appointment;
 import com.development.unobtainium.cimedic2.models.Patient;
+import com.development.unobtainium.cimedic2.responses.AppointmentsResponse;
 import com.development.unobtainium.cimedic2.responses.ClinicsResponse;
 import com.development.unobtainium.cimedic2.responses.DoctorsResponse;
+import com.development.unobtainium.cimedic2.responses.OkResponse;
 import com.development.unobtainium.cimedic2.responses.PatientResponse;
 import com.development.unobtainium.cimedic2.responses.RelativesResponse;
 import com.development.unobtainium.cimedic2.responses.SchedulesResponse;
@@ -76,4 +79,17 @@ public interface ServicesInterface {
 
     @GET("clinics/{clinic_id}/specialties/{specialty_id}/doctors/{doctor_id}/schedules")
     Call<SchedulesResponse> getSchedules(@Header("Authorization") String authorization, @Path("clinic_id") String clinic_id, @Path("specialty_id") String specialty_id, @Path("doctor_id") String doctor_id);
+
+    @POST("appointments")
+    Call<OkResponse> createAppointment(@Header("Authorization") String authorization,
+                             @Query("clinic_id") String clinic_id,
+                             @Query("specialty_id") String specialty_id,
+                             @Query("doctor_id") String doctor_id,
+                             @Query("schedule_id") String schedule_id);
+
+    @GET("appointments")
+    Call<AppointmentsResponse> getAppointments(@Header("Authorization") String authorization);
+
+    @PUT("appointments/{appointment_id}")
+    Call<OkResponse> updateAppointment(@Header("Authorization") String authorization, @Path("appointment_id") String appointment_id);
 }

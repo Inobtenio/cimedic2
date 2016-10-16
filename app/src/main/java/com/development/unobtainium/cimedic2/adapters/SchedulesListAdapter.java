@@ -12,7 +12,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.development.unobtainium.cimedic2.R;
+import com.development.unobtainium.cimedic2.fragments.AppointmentPreviewFragment;
 import com.development.unobtainium.cimedic2.fragments.SchedulesFragment;
+import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
+import com.development.unobtainium.cimedic2.models.Doctor;
+import com.development.unobtainium.cimedic2.models.Patient;
 import com.development.unobtainium.cimedic2.models.Schedule;
 
 import java.util.ArrayList;
@@ -24,10 +28,10 @@ import java.util.Comparator;
  */
 public class SchedulesListAdapter extends BaseAdapter {
     private Context mContext;
-    private SchedulesFragment dFragment;
+    private SchedulesFragment sFragment;
     private ArrayList<Schedule> schedulesList = new ArrayList<Schedule>();
 
-    public SchedulesListAdapter(Context mContext, ArrayList<Schedule> schedulesList) {
+    public SchedulesListAdapter(Context mContext, ArrayList<Schedule> schedulesList, SchedulesFragment fragment) {
         this.mContext = mContext;
 //        this.dFragment = fragment;
 //        if (schedulesList.size() > 1) {
@@ -38,6 +42,7 @@ public class SchedulesListAdapter extends BaseAdapter {
 //                }
 //            });
 //        }
+        this.sFragment = fragment;
         this.schedulesList = schedulesList;
     }
 
@@ -72,17 +77,17 @@ public class SchedulesListAdapter extends BaseAdapter {
             row.setBackgroundColor(Color.parseColor("#FB0D1B"));
             holder.text.setTextColor(Color.WHITE);
         }
-//        row.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentManager fm = ((Activity) mContext).getFragmentManager();
-//                FragmentTransaction ft = fm.beginTransaction();
-//                SchedulesFragment llf = SchedulesFragment.newInstance(dFragment.getArguments().getInt("clinic_id"), dFragment.getArguments().getInt("specialty_id"), schedulesList.get(position).getId());
-//                ft.replace(R.id.currentFragment, llf);
-//                ft.addToBackStack(null);
-//                ft.commit();
-//            }
-//        });
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = ((Activity) mContext).getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                AppointmentPreviewFragment llf = AppointmentPreviewFragment.newInstance(sFragment, PatientSessionManager.getInstance(mContext).getLoggedPatientName(), PatientSessionManager.getInstance(mContext).getLoggedPatientImage(), schedulesList.get(position));
+                ft.replace(R.id.currentFragment, llf);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
 
         return row;
     }

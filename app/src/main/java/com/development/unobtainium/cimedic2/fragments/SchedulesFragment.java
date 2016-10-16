@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.development.unobtainium.cimedic2.R;
 import com.development.unobtainium.cimedic2.adapters.SchedulesListAdapter;
 import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
+import com.development.unobtainium.cimedic2.models.Doctor;
 import com.development.unobtainium.cimedic2.models.Schedule;
 import com.development.unobtainium.cimedic2.responses.SchedulesResponse;
 import com.development.unobtainium.cimedic2.retrofit.ServiceError;
@@ -63,13 +64,15 @@ public class SchedulesFragment extends Fragment {
     private ServiceError sError;
     private String error = "";
     private View mProgressView;
+    public Doctor mDoctor;
+    public static SchedulesFragment sFragment;
     Gson gson;
     ListView listView;
 
     // TODO: Rename and change types of parameters
-    private String clinic_id;
-    private String specialty_id;
-    private String doctor_id;
+    public String clinic_id;
+    public String specialty_id;
+    public String doctor_id;
 
     private OnFragmentInteractionListener mListener;
 
@@ -79,13 +82,14 @@ public class SchedulesFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static SchedulesFragment newInstance(Integer clinic_id, Integer specialty_id, Integer doctor_id) {
+    public static SchedulesFragment newInstance(Integer clinic_id, Integer specialty_id, Doctor doctor) {
         SchedulesFragment fragment = new SchedulesFragment();
         Bundle args = new Bundle();
         args.putInt(CLINIC_ID, clinic_id);
         args.putInt(SPECIALTY_ID, specialty_id);
-        args.putInt(DOCTOR_ID, doctor_id);
+        fragment.mDoctor = doctor;
         fragment.setArguments(args);
+        sFragment = fragment;
         return fragment;
     }
 
@@ -118,7 +122,7 @@ public class SchedulesFragment extends Fragment {
             ServicesInterface apiService =
                     retrofit.create(ServicesInterface.class);
 
-            final Call<SchedulesResponse> call = apiService.getSchedules(PatientSessionManager.getInstance(getContext()).getLoggedPatientId(), clinic_id, specialty_id, doctor_id);
+            final Call<SchedulesResponse> call = apiService.getSchedules(PatientSessionManager.getInstance(getContext()).getLoggedPatientId(), clinic_id, specialty_id, String.valueOf(mDoctor.getId()));
             try {
                 Response<SchedulesResponse> response = call.execute();
                 schedules = response.body().schedules;
@@ -151,7 +155,7 @@ public class SchedulesFragment extends Fragment {
 //                        Collections.sort((List) values);
                         listView = (ListView) getView().findViewById(getResources().getIdentifier(key, "id", getActivity().getPackageName()));
                         if (listView != null){
-                            listView.setAdapter(new SchedulesListAdapter(getContext(), new ArrayList<Schedule>(values)));
+                            listView.setAdapter(new SchedulesListAdapter(getContext(), new ArrayList<Schedule>(values), sFragment));
                         }
                     }
                 } else {
