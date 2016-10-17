@@ -84,7 +84,7 @@ public class DoctorsListAdapter extends BaseAdapter {
             public void onClick(View v) {
                 FragmentManager fm = ((Activity) mContext).getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
-                SchedulesFragment llf = SchedulesFragment.newInstance(dFragment.getArguments().getInt("clinic_id"), dFragment.getArguments().getInt("specialty_id"), doctorsList.get(position).getId());
+                SchedulesFragment llf = SchedulesFragment.newInstance(dFragment.getArguments().getInt("clinic_id"), dFragment.getArguments().getInt("specialty_id"), doctorsList.get(position));
                 ft.replace(R.id.currentFragment, llf);
                 ft.addToBackStack(null);
                 ft.commit();

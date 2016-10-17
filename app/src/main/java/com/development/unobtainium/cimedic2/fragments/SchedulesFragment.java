@@ -10,12 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.development.unobtainium.cimedic2.R;
 import com.development.unobtainium.cimedic2.adapters.SchedulesListAdapter;
 import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
+import com.development.unobtainium.cimedic2.models.Doctor;
 import com.development.unobtainium.cimedic2.models.Schedule;
 import com.development.unobtainium.cimedic2.responses.SchedulesResponse;
 import com.development.unobtainium.cimedic2.retrofit.ServiceError;
@@ -23,6 +25,9 @@ import com.development.unobtainium.cimedic2.retrofit.ServicesInterface;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -63,13 +68,16 @@ public class SchedulesFragment extends Fragment {
     private ServiceError sError;
     private String error = "";
     private View mProgressView;
+    public Doctor mDoctor;
+    private ImageView doctorPicture;
+    public static SchedulesFragment sFragment;
     Gson gson;
     ListView listView;
 
     // TODO: Rename and change types of parameters
-    private String clinic_id;
-    private String specialty_id;
-    private String doctor_id;
+    public String clinic_id;
+    public String specialty_id;
+    public String doctor_id;
 
     private OnFragmentInteractionListener mListener;
 
@@ -79,13 +87,14 @@ public class SchedulesFragment extends Fragment {
 
 
     // TODO: Rename and change types and number of parameters
-    public static SchedulesFragment newInstance(Integer clinic_id, Integer specialty_id, Integer doctor_id) {
+    public static SchedulesFragment newInstance(Integer clinic_id, Integer specialty_id, Doctor doctor) {
         SchedulesFragment fragment = new SchedulesFragment();
         Bundle args = new Bundle();
         args.putInt(CLINIC_ID, clinic_id);
         args.putInt(SPECIALTY_ID, specialty_id);
-        args.putInt(DOCTOR_ID, doctor_id);
+        fragment.mDoctor = doctor;
         fragment.setArguments(args);
+        sFragment = fragment;
         return fragment;
     }
 
@@ -118,7 +127,7 @@ public class SchedulesFragment extends Fragment {
             ServicesInterface apiService =
                     retrofit.create(ServicesInterface.class);
 
-            final Call<SchedulesResponse> call = apiService.getSchedules(PatientSessionManager.getInstance(getContext()).getLoggedPatientId(), clinic_id, specialty_id, doctor_id);
+            final Call<SchedulesResponse> call = apiService.getSchedules(PatientSessionManager.getInstance(getContext()).getLoggedPatientId(), clinic_id, specialty_id, String.valueOf(mDoctor.getId()));
             try {
                 Response<SchedulesResponse> response = call.execute();
                 schedules = response.body().schedules;
@@ -151,7 +160,7 @@ public class SchedulesFragment extends Fragment {
 //                        Collections.sort((List) values);
                         listView = (ListView) getView().findViewById(getResources().getIdentifier(key, "id", getActivity().getPackageName()));
                         if (listView != null){
-                            listView.setAdapter(new SchedulesListAdapter(getContext(), new ArrayList<Schedule>(values)));
+                            listView.setAdapter(new SchedulesListAdapter(getContext(), new ArrayList<Schedule>(values), sFragment));
                         }
                     }
                 } else {
@@ -176,6 +185,20 @@ public class SchedulesFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         mProgressView = getView().findViewById(R.id.schedules_progress);
+        doctorPicture = (ImageView) getView().findViewById(R.id.sch_doctor_picture);
+        if (!mDoctor.getImage().equals("")) {
+            Transformation transformationBadge = new RoundedTransformationBuilder()
+                    .cornerRadiusDp(50)
+                    .oval(true)
+                    .build();
+            Picasso.with(getContext())
+                    .load(mDoctor.getImage())
+                    .fit().centerCrop()
+                    .transform(transformationBadge)
+                    .into(doctorPicture);
+        } else {
+            doctorPicture.setImageDrawable(getResources().getDrawable(R.drawable.patient_placeholder));
+        };
 //        listView = (ListView) getView().findViewById(R.id.doctors_list);
         showProgress(true);
         mSchedulesTask = new SchedulesTask();

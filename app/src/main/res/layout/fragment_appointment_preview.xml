@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.development.unobtainium.cimedic2.fragments.AppointmentPreviewFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/appointment_progress"
+        android:paddingLeft="150dp"
+        android:paddingTop="220dp"
+        android:indeterminate="false"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/app_doctor_picture"
+        android:src="@drawable/patient_placeholder"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#bdbdbd"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/view" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/app_patient_picture"
+        android:src="@drawable/patient_placeholder"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/view"
+        android:layout_alignStart="@+id/app_doctor_picture" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/app_patient_name"
+        android:layout_below="@+id/app_patient_picture"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:textSize="24dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RESERVAR"
+        android:id="@+id/app_book_button"
+        android:background="@drawable/red_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/whiteColor"
+        android:textStyle="bold"
+        android:textSize="18dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/app_doctor_name"
+        android:layout_below="@+id/app_doctor_picture"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:textSize="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/app_doctor_schedule"
+        android:layout_below="@+id/app_doctor_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:gravity="center_horizontal" />
+
+</RelativeLayout>

@@ -5,14 +5,22 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.shapes.Shape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.development.unobtainium.cimedic2.R;
+import com.development.unobtainium.cimedic2.fragments.AppointmentPreviewFragment;
 import com.development.unobtainium.cimedic2.fragments.SchedulesFragment;
+import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
+import com.development.unobtainium.cimedic2.models.Doctor;
+import com.development.unobtainium.cimedic2.models.Patient;
 import com.development.unobtainium.cimedic2.models.Schedule;
 
 import java.util.ArrayList;
@@ -24,10 +32,10 @@ import java.util.Comparator;
  */
 public class SchedulesListAdapter extends BaseAdapter {
     private Context mContext;
-    private SchedulesFragment dFragment;
+    private SchedulesFragment sFragment;
     private ArrayList<Schedule> schedulesList = new ArrayList<Schedule>();
 
-    public SchedulesListAdapter(Context mContext, ArrayList<Schedule> schedulesList) {
+    public SchedulesListAdapter(Context mContext, ArrayList<Schedule> schedulesList, SchedulesFragment fragment) {
         this.mContext = mContext;
 //        this.dFragment = fragment;
 //        if (schedulesList.size() > 1) {
@@ -38,6 +46,7 @@ public class SchedulesListAdapter extends BaseAdapter {
 //                }
 //            });
 //        }
+        this.sFragment = fragment;
         this.schedulesList = schedulesList;
     }
 
@@ -69,20 +78,26 @@ public class SchedulesListAdapter extends BaseAdapter {
         holder.text = (TextView) row.findViewById(R.id.scheduleText);
         holder.text.setText(schedulesList.get(position).hoursString());
         if (schedulesList.get(position).taken){
-            row.setBackgroundColor(Color.parseColor("#FB0D1B"));
+            row.setBackground(parent.getResources().getDrawable(R.drawable.red_rounded_text_view));
             holder.text.setTextColor(Color.WHITE);
+        } else {
+            row.setBackground(parent.getResources().getDrawable(R.drawable.rounded_text_view));
         }
-//        row.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentManager fm = ((Activity) mContext).getFragmentManager();
-//                FragmentTransaction ft = fm.beginTransaction();
-//                SchedulesFragment llf = SchedulesFragment.newInstance(dFragment.getArguments().getInt("clinic_id"), dFragment.getArguments().getInt("specialty_id"), schedulesList.get(position).getId());
-//                ft.replace(R.id.currentFragment, llf);
-//                ft.addToBackStack(null);
-//                ft.commit();
-//            }
-//        });
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (schedulesList.get(position).taken){
+                    Toast.makeText(mContext, "Este horario ya ha sido reservado", Toast.LENGTH_SHORT).show();
+                } else {
+                    FragmentManager fm = ((Activity) mContext).getFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    AppointmentPreviewFragment llf = AppointmentPreviewFragment.newInstance(sFragment, PatientSessionManager.getInstance(mContext).getLoggedPatientName(), PatientSessionManager.getInstance(mContext).getLoggedPatientImage(), schedulesList.get(position));
+                    ft.replace(R.id.currentFragment, llf);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                }
+            }
+        });
 
         return row;
     }

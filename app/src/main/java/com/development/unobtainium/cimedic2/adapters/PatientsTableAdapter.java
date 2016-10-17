@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.development.unobtainium.cimedic2.R;
 import com.development.unobtainium.cimedic2.activities.SearchActivity;
+import com.development.unobtainium.cimedic2.fragments.AppointmentPreviewFragment;
+import com.development.unobtainium.cimedic2.fragments.PatientsFragment;
 import com.development.unobtainium.cimedic2.fragments.RegistrationFragment;
 import com.development.unobtainium.cimedic2.fragments.SearchFragment;
 import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
@@ -36,10 +38,16 @@ import java.util.ArrayList;
 public class PatientsTableAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<Patient> patientList = new ArrayList<Patient>();
+    private Boolean change;
+    private PatientsFragment pFragment;
+    private AppointmentPreviewFragment appFragment;
 
-    public PatientsTableAdapter(Context mContext, ArrayList<Patient> relatives) {
+    public PatientsTableAdapter(Context mContext, ArrayList<Patient> relatives, Boolean value, PatientsFragment fragment, AppointmentPreviewFragment aFragment) {
         patientList = relatives;
+        this.change = value;
         this.mContext = mContext;
+        this.pFragment = fragment;
+        this.appFragment = aFragment;
     }
 
     @Override
@@ -108,40 +116,46 @@ public class PatientsTableAdapter extends BaseAdapter {
                 PatientSessionManager psm = new PatientSessionManager(parent.getContext());
                 psm.createPatientLoginSession(patientList.get(position).getId(), patientList.get(position).getEmail(), patientList.get(position).getNames(), patientList.get(position).getImage());
                 ((SearchActivity) mContext).updateProfilePicture();
-                FragmentManager fm = ((Activity) mContext).getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                SearchFragment llf = new SearchFragment();
-                ft.addToBackStack(null);
-                ft.replace(R.id.currentFragment, llf);
-                ft.commit();
+                if (change){
+                    FragmentManager fm = ((Activity) mContext).getFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    SearchFragment llf = new SearchFragment();
+                    ft.replace(R.id.currentFragment, llf);
+                    ft.commit();
+                } else {
+                    appFragment.updatePatientData();
+                    pFragment.dismiss();
+                }
             }
         });
-        cell.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                PopupMenu menu = new PopupMenu(mContext, v);
-                menu.getMenuInflater().inflate(R.menu.patient_actions, menu.getMenu());
-                menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        int id = item.getItemId();
-                        if (id == R.id.patient_edit_action) {
-                            FragmentManager fm = ((Activity) mContext).getFragmentManager();
-                            FragmentTransaction ft = fm.beginTransaction();
-                            RegistrationFragment llf = RegistrationFragment.newInstance(patientList.get(position), patientList.get(position).getPrincipal(), String.valueOf(patientList.get(position).getId()) , true);
-                            ft.addToBackStack("main");
-                            ft.replace(R.id.currentFragment, llf);
-                            ft.commit();
-                        } else if (id == R.id.patient_delete_action) {
-                            Toast.makeText(mContext, "Aun no implementado", Toast.LENGTH_LONG).show();
+        if (change){
+            cell.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    PopupMenu menu = new PopupMenu(mContext, v);
+                    menu.getMenuInflater().inflate(R.menu.patient_actions, menu.getMenu());
+                    menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            int id = item.getItemId();
+                            if (id == R.id.patient_edit_action) {
+                                FragmentManager fm = ((Activity) mContext).getFragmentManager();
+                                FragmentTransaction ft = fm.beginTransaction();
+                                RegistrationFragment llf = RegistrationFragment.newInstance(patientList.get(position), patientList.get(position).getPrincipal(), String.valueOf(patientList.get(position).getId()) , true);
+                                ft.addToBackStack("main");
+                                ft.replace(R.id.currentFragment, llf);
+                                ft.commit();
+                            } else if (id == R.id.patient_delete_action) {
+                                Toast.makeText(mContext, "Aun no implementado", Toast.LENGTH_LONG).show();
+                            }
+                            return false;
                         }
-                        return false;
-                    }
-                });
-                menu.show();
-                return true;
-            }
-        });
+                    });
+                    menu.show();
+                    return true;
+                }
+            });
+        }
         return cell;
     }
 }
