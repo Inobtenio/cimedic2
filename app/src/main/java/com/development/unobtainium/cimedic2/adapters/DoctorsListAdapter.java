@@ -18,6 +18,7 @@ import com.development.unobtainium.cimedic2.fragments.SchedulesFragment;
 import com.development.unobtainium.cimedic2.models.Doctor;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 
@@ -64,8 +65,13 @@ public class DoctorsListAdapter extends BaseAdapter {
 //        String loggedPatientId = PatientSessionManager.getInstance(parent.getContext()).getLoggedPatientId();
         holder.picture = (ImageView) row.findViewById(R.id.doctor_photo);
         if (!doctorsList.get(position).getImage().equals("")) {
+            Transformation transformation = new RoundedTransformationBuilder()
+                    .cornerRadiusDp(60)
+                    .oval(true)
+                    .build();
             Picasso.with(parent.getContext())
                     .load(doctorsList.get(position).getImage())
+                    .transform(transformation)
                     .fit().centerCrop()
                     .into(holder.picture);
         } else {

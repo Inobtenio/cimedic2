@@ -180,6 +180,7 @@ public class PatientsFragment extends Fragment {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 RegistrationFragment llf = RegistrationFragment.newInstance(null, false, new PatientSessionManager(getContext()).getLoggedPatientId(), false);
+                ft.addToBackStack(null);
                 ft.replace(R.id.currentFragment, llf);
                 ft.commit();
             }

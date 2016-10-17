@@ -126,7 +126,7 @@
                 android:layout_centerHorizontal="true" />
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
@@ -135,26 +135,28 @@
                 android:layout_toEndOf="@+id/textView4" />
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
                 android:id="@+id/last_name_input"
                 android:layout_below="@+id/names_input"
-                android:layout_alignStart="@+id/names_input" />
+                android:layout_alignStart="@+id/names_input"
+                android:layout_marginTop="3dp" />
 
             <EditText
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
                 android:ems="10"
                 android:id="@+id/mothers_last_name_input"
                 android:layout_below="@+id/last_name_input"
-                android:layout_alignStart="@+id/last_name_input" />
+                android:layout_alignStart="@+id/last_name_input"
+                android:layout_marginTop="3dp" />
 
             <EditText
                 android:focusable="false"
-                android:layout_width="160dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="date"
                 android:ems="10"
@@ -193,7 +195,8 @@
                 android:ems="10"
                 android:id="@+id/email_input"
                 android:layout_below="@+id/address_input"
-                android:layout_alignStart="@+id/address_input" />
+                android:layout_alignStart="@+id/address_input"
+                android:layout_alignParentEnd="true" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -232,7 +235,8 @@
                 android:ems="10"
                 android:id="@+id/password_input"
                 android:layout_below="@+id/email_input"
-                android:layout_alignStart="@+id/email_input" />
+                android:layout_alignStart="@+id/email_input"
+                android:layout_alignParentEnd="true" />
 
             <ImageView
                 android:layout_width="140dp"
@@ -258,7 +262,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Parentesco"
-                android:id="@+id/textView9"
+                android:id="@+id/relationship_label"
                 android:layout_below="@+id/textView8"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="60dp" />

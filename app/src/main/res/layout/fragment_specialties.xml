@@ -11,12 +11,15 @@
         android:id="@+id/specialties_progress"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:paddingLeft="150dp"
+        android:paddingTop="220dp" />
 
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/specialties_grid"
+        android:layout_marginBottom="10dp"
         android:numColumns="auto_fit"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="0dp"

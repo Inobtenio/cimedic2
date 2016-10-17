@@ -126,22 +126,22 @@ public class SearchActivity extends AppCompatActivity
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             SearchFragment llf = new SearchFragment();
-            ft.addToBackStack("main");
+            ft.addToBackStack(null);
             ft.replace(R.id.currentFragment, llf);
             ft.commit();
         } else if (id == R.id.nav_patients) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             PatientsFragment llf = new PatientsFragment();
+            ft.addToBackStack(null);
             ft.replace(R.id.currentFragment, llf);
-            ft.addToBackStack("main");
             ft.commit();
         } else if (id == R.id.nav_history) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             HistoryFragment llf = new HistoryFragment();
+            ft.addToBackStack(null);
             ft.replace(R.id.currentFragment, llf);
-            ft.addToBackStack("main");
             ft.commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

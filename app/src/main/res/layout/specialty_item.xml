@@ -10,7 +10,7 @@
         android:background="@drawable/clinic_placeholder"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal" />
 
     <TextView

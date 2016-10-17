@@ -104,15 +104,6 @@ public class RegistrationFragment extends Fragment {
         return fragment;
     }
 
-    public static RegistrationFragment newEditInstance(Boolean show, String id){
-        RegistrationFragment fragment = new RegistrationFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(SHOW_PASSWORD, show);
-        args.putString(PATIENT_ID, id);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,6 +142,7 @@ public class RegistrationFragment extends Fragment {
         Spinner departmentSpinner = (Spinner) getView().findViewById(R.id.department_spinner);
         final Spinner districtSpinner = (Spinner) getView().findViewById(R.id.district_spinner);
         final CheckBox termsCheckbox = (CheckBox) getView().findViewById(R.id.terms_checkbox);
+        final TextView relationshipLabel = (TextView) getView().findViewById(R.id.relationship_label);
         final Spinner relationshipSpinner = (Spinner) getView().findViewById(R.id.relationship_spinner);
         Button registerButton = (Button) getView().findViewById(R.id.register_button);
 
@@ -201,6 +193,10 @@ public class RegistrationFragment extends Fragment {
             emailInput.setText(editingPatient.getEmail());
             passwordInput.setText(editingPatient.getPassword());
             termsCheckbox.setVisibility(View.INVISIBLE);
+            if (editingPatient.getPrincipal()){
+                relationshipSpinner.setVisibility(View.INVISIBLE);
+                relationshipLabel.setVisibility(View.INVISIBLE);
+            }
         }
 
         assert registerButton != null;

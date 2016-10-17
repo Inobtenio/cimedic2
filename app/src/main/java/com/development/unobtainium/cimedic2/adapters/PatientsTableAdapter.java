@@ -111,6 +111,7 @@ public class PatientsTableAdapter extends BaseAdapter {
                 FragmentManager fm = ((Activity) mContext).getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 SearchFragment llf = new SearchFragment();
+                ft.addToBackStack(null);
                 ft.replace(R.id.currentFragment, llf);
                 ft.commit();
             }

@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/whiteColor"
     tools:context="com.development.unobtainium.cimedic2.fragments.SearchFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -9,23 +10,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/profile_progress"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:paddingTop="220dp"
+        android:paddingLeft="150dp" />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:id="@+id/clinicsList"
+        android:dividerHeight="35dp"
+        android:divider="@color/whiteColor"
         android:verticalSpacing="40dp"
         android:stretchMode="columnWidth"
         android:scrollbars="none"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="false"
         android:layout_alignParentBottom="false"
-        android:layout_gravity="right|bottom" />
+        android:elevation="5dp" />
 
 
 </FrameLayout>

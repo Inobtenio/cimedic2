@@ -94,8 +94,8 @@ public class ClinicsListAdapter extends BaseAdapter {
                 FragmentManager fm = ((Activity) mContext).getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 SpecialtiesFragment llf = SpecialtiesFragment.newInstance(clinics.get(position).getId());
-                ft.replace(R.id.currentFragment, llf);
                 ft.addToBackStack(null);
+                ft.replace(R.id.currentFragment, llf);
                 ft.commit();
             }
         });

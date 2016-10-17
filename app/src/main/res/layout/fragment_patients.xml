@@ -11,7 +11,9 @@
         android:id="@+id/profile_progress"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:paddingLeft="150dp"
+        android:paddingTop="220dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

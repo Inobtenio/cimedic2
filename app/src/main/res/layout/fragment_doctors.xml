@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/whiteColor"
     tools:context="com.development.unobtainium.cimedic2.fragments.DoctorsFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -11,14 +12,19 @@
         android:id="@+id/doctors_progress"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:paddingLeft="150dp"
+        android:paddingTop="220dp" />
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
         android:id="@+id/doctors_list"
+        android:dividerHeight="20dp"
+        android:divider="@color/whiteColor"
         android:verticalSpacing="40dp"
         android:stretchMode="columnWidth"
         android:scrollbars="none"
