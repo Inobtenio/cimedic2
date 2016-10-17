@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,6 +25,9 @@ import com.development.unobtainium.cimedic2.retrofit.ServicesInterface;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -65,6 +69,7 @@ public class SchedulesFragment extends Fragment {
     private String error = "";
     private View mProgressView;
     public Doctor mDoctor;
+    private ImageView doctorPicture;
     public static SchedulesFragment sFragment;
     Gson gson;
     ListView listView;
@@ -180,6 +185,20 @@ public class SchedulesFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         mProgressView = getView().findViewById(R.id.schedules_progress);
+        doctorPicture = (ImageView) getView().findViewById(R.id.sch_doctor_picture);
+        if (!mDoctor.getImage().equals("")) {
+            Transformation transformationBadge = new RoundedTransformationBuilder()
+                    .cornerRadiusDp(50)
+                    .oval(true)
+                    .build();
+            Picasso.with(getContext())
+                    .load(mDoctor.getImage())
+                    .fit().centerCrop()
+                    .transform(transformationBadge)
+                    .into(doctorPicture);
+        } else {
+            doctorPicture.setImageDrawable(getResources().getDrawable(R.drawable.patient_placeholder));
+        };
 //        listView = (ListView) getView().findViewById(R.id.doctors_list);
         showProgress(true);
         mSchedulesTask = new SchedulesTask();
