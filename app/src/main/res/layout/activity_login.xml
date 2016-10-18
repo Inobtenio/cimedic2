@@ -41,7 +41,8 @@
                 android:id="@+id/login_progress"
                 android:indeterminate="false"
                 android:layout_alignTop="@+id/password"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:elevation="1dp" />
 
             <EditText
                 android:layout_width="match_parent"

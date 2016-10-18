@@ -199,6 +199,11 @@ public class RegistrationFragment extends Fragment {
             }
         }
 
+        if (!PatientSessionManager.getInstance(getContext()).isPatientLoggedIn()){
+            relationshipSpinner.setVisibility(View.INVISIBLE);
+            relationshipLabel.setVisibility(View.INVISIBLE);
+        }
+
         assert registerButton != null;
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
