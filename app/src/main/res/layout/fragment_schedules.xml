@@ -35,6 +35,8 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:id="@+id/day4"
+        android:dividerHeight="15dp"
+        android:divider="@color/whiteColor"
         android:layout_alignTop="@+id/day2"
         android:layout_centerHorizontal="true" />
 
@@ -42,6 +44,8 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:id="@+id/day6"
+        android:dividerHeight="15dp"
+        android:divider="@color/whiteColor"
         android:layout_alignTop="@+id/day4"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="10dp" />
