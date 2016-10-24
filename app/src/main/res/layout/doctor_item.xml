@@ -22,13 +22,13 @@
         android:layout_marginTop="23dp"
         android:layout_marginLeft="15dp"
         android:layout_marginStart="13dp"
-        android:layout_alignTop="@+id/doctor_photo"
-        android:layout_toEndOf="@+id/doctor_photo" />
+        android:layout_alignTop="@+id/app_doctor_photo"
+        android:layout_toEndOf="@+id/app_doctor_photo" />
 
     <ImageView
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:id="@+id/doctor_photo"
+        android:id="@+id/app_doctor_photo"
         android:background="@drawable/patient_placeholder"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="12dp"

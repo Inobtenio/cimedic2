@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/whiteColor"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/app_doctor_photo"
+        android:background="@drawable/patient_placeholder"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
+        android:text="Medium Text"
+        android:id="@+id/app_specialty"
+        android:layout_alignTop="@+id/app_doctor_photo"
+        android:layout_toEndOf="@+id/app_doctor_photo"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/app_date"
+        android:layout_below="@+id/app_specialty"
+        android:layout_toEndOf="@+id/app_doctor_photo"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:textStyle="bold"
+        android:id="@+id/app_doctor_name"
+        android:layout_below="@+id/app_doctor_photo"
+        android:layout_alignStart="@+id/app_doctor_photo"
+        android:layout_alignEnd="@+id/app_time" />
+
+    <ImageView
+        android:layout_width="125dp"
+        android:layout_height="30dp"
+        android:id="@+id/app_clinic_photo"
+        android:layout_marginRight="0dp"
+        android:layout_alignBottom="@+id/app_doctor_name"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +62,7 @@ public class DoctorsListAdapter extends BaseAdapter {
         View row;
         row = LayoutInflater.from(parent.getContext()).inflate(R.layout.doctor_item, parent, false);
 //        String loggedPatientId = PatientSessionManager.getInstance(parent.getContext()).getLoggedPatientId();
-        holder.picture = (ImageView) row.findViewById(R.id.doctor_photo);
+        holder.picture = (ImageView) row.findViewById(R.id.app_doctor_photo);
         if (!doctorsList.get(position).getImage().equals("")) {
             Transformation transformation = new RoundedTransformationBuilder()
                     .cornerRadiusDp(60)

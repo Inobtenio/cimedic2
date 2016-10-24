@@ -2,13 +2,31 @@ package com.development.unobtainium.cimedic2.fragments;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.development.unobtainium.cimedic2.R;
+import com.development.unobtainium.cimedic2.adapters.AppointmentsListAdapter;
+import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
+import com.development.unobtainium.cimedic2.models.Appointment;
+import com.development.unobtainium.cimedic2.responses.AppointmentsResponse;
+import com.development.unobtainium.cimedic2.retrofit.ServiceError;
+import com.development.unobtainium.cimedic2.retrofit.ServicesInterface;
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -24,6 +42,14 @@ public class HistoryFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private AppointmentsTask mAppointmentsTask = null;
+    final String api_endpoint = "https://medic-1.herokuapp.com/api/v1/"; //"http://192.168.1.105:3000/api/v1/";
+    private ArrayList<Appointment> appointments;
+    private ServiceError sError;
+    private String error = "";
+    private View mProgressView;
+    Gson gson;
+    ListView listView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -69,11 +95,78 @@ public class HistoryFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_history, container, false);
     }
 
+    public class AppointmentsTask extends AsyncTask<Void, Void, Boolean> {
+        final Context context = getContext();
+
+        AppointmentsTask() {
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            final String BASE_URL = api_endpoint;
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            ServicesInterface apiService =
+                    retrofit.create(ServicesInterface.class);
+
+            final Call<AppointmentsResponse> call = apiService.getAppointments(PatientSessionManager.getInstance(getContext()).getLoggedPatientId());
+            try {
+                Response<AppointmentsResponse> response = call.execute();
+                appointments = response.body().appointments;
+                sError = response.body().error;
+            } catch (IOException e) {
+                error = e.getMessage();
+            }
+            return error.isEmpty();
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAppointmentsTask = null;
+            showProgress(false);
+
+            if (success) {
+                if (sError == null){
+                    listView.setAdapter(new AppointmentsListAdapter(getContext(), appointments) );
+                } else {
+                    Toast.makeText(getContext(), sError.getDescription(), Toast.LENGTH_SHORT).show();
+                }
+            } else{
+                Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAppointmentsTask = null;
+            showProgress(false);
+        }
+    }
+
+    private void showProgress(final boolean show) {
+        mProgressView.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        mProgressView = getView().findViewById(R.id.history_progress);
+        listView = (ListView) getView().findViewById(R.id.appointment_list);
+        showProgress(true);
+        mAppointmentsTask = new AppointmentsTask();
+        mAppointmentsTask.execute((Void) null);
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override

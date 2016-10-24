@@ -5,8 +5,9 @@ package com.development.unobtainium.cimedic2.models;
  */
 public class Appointment {
     private Patient patient;
-    private Doctor doctor;
     private Clinic clinic;
+    private Specialty specialty;
+    private Doctor doctor;
     private Schedule schedule;
 
     public Patient getPatient() {
@@ -39,5 +40,13 @@ public class Appointment {
 
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
+    }
+
+    public Specialty getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(Specialty specialty) {
+        this.specialty = specialty;
     }
 }

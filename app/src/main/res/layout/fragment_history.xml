@@ -2,12 +2,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/whiteColor"
     tools:context=".fragments.HistoryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/history_progress"
+        android:indeterminate="false"
+        android:paddingTop="220dp"
+        android:paddingLeft="150dp" />
+
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Medical appointment history will appear here"/>
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:id="@+id/appointment_list"
+        android:dividerHeight="35dp"
+        android:divider="@color/whiteColor"
+        android:verticalSpacing="40dp"
+        android:stretchMode="columnWidth"
+        android:scrollbars="none"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentBottom="false"
+        android:elevation="5dp" />
 
 </FrameLayout>
