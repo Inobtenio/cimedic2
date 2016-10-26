@@ -1,5 +1,8 @@
 package com.development.unobtainium.cimedic2.adapters;
 
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.development.unobtainium.cimedic2.R;
+import com.development.unobtainium.cimedic2.fragments.AppointmentPreviewFragment;
+import com.development.unobtainium.cimedic2.fragments.SchedulesFragment;
+import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
 import com.development.unobtainium.cimedic2.models.Appointment;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
@@ -90,17 +96,17 @@ public class AppointmentsListAdapter extends BaseAdapter{
 //        holder.schedule_time.setText(appointments.get(position).getSchedule().fullHoursString());
         holder.doctor_name = (TextView) row.findViewById(R.id.app_doctor_name);
         holder.doctor_name.setText(appointments.get(position).getDoctor().getName());
-//        row.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                FragmentManager fm = ((Activity) mContext).getFragmentManager();
-//                FragmentTransaction ft = fm.beginTransaction();
-//                SchedulesFragment llf = SchedulesFragment.newInstance(dFragment.getArguments().getInt("clinic_id"), dFragment.getArguments().getInt("specialty_id"), appointments.get(position));
-//                ft.replace(R.id.currentFragment, llf);
-//                ft.addToBackStack(null);
-//                ft.commit();
-//            }
-//        });
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = ((Activity) mContext).getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                AppointmentPreviewFragment llf = AppointmentPreviewFragment.newInstance(appointments.get(position), PatientSessionManager.getInstance(mContext).getLoggedPatientName(), PatientSessionManager.getInstance(mContext).getLoggedPatientImage(), appointments.get(position).getSchedule());
+                ft.replace(R.id.currentFragment, llf);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
 
         return row;
     }

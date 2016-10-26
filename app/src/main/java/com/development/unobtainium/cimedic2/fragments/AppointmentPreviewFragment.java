@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.development.unobtainium.cimedic2.R;
 import com.development.unobtainium.cimedic2.managers.PatientSessionManager;
+import com.development.unobtainium.cimedic2.models.Appointment;
 import com.development.unobtainium.cimedic2.models.Doctor;
 import com.development.unobtainium.cimedic2.models.Patient;
 import com.development.unobtainium.cimedic2.models.Schedule;
@@ -66,6 +67,7 @@ public class AppointmentPreviewFragment extends Fragment {
     private TextView patientName;
     private Button registerButton;
     private SchedulesFragment sFragment;
+    private Appointment mAppointment = null;
     private String message;
     private RegisterAppointmentTask mAppointmentTask;
     final String api_endpoint = "https://medic-1.herokuapp.com/api/v1/";
@@ -81,6 +83,16 @@ public class AppointmentPreviewFragment extends Fragment {
         AppointmentPreviewFragment fragment = new AppointmentPreviewFragment();
         fragment.sFragment = schFragment;
         fragment.mDoctor = schFragment.mDoctor;
+        fragment.mPatientName = patientName;
+        fragment.mPatientPicture = patientPicture;
+        fragment.mSchedule = schedule;
+        return fragment;
+    }
+
+    public static AppointmentPreviewFragment newInstance(Appointment appointment, String patientName, String patientPicture, Schedule schedule) {
+        AppointmentPreviewFragment fragment = new AppointmentPreviewFragment();
+        fragment.mAppointment = appointment;
+        fragment.mDoctor = appointment.getDoctor();
         fragment.mPatientName = patientName;
         fragment.mPatientPicture = patientPicture;
         fragment.mSchedule = schedule;
@@ -124,12 +136,19 @@ public class AppointmentPreviewFragment extends Fragment {
                 fragment.show(getFragmentManager(), "Dialog");
             }
         });
+        if (mAppointment != null){
+            registerButton.setText("EDITAR CITA");
+        }
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgress(true);
-                mAppointmentTask = new RegisterAppointmentTask();
-                mAppointmentTask.execute((Void) null);
+                if (mAppointment != null){
+                    Toast.makeText(getContext(), "Aún no implementado", Toast.LENGTH_LONG).show();
+                } else {
+                    showProgress(true);
+                    mAppointmentTask = new RegisterAppointmentTask();
+                    mAppointmentTask.execute((Void) null);
+                }
             }
         });
 
@@ -185,7 +204,13 @@ public class AppointmentPreviewFragment extends Fragment {
             ServicesInterface apiService =
                     retrofit.create(ServicesInterface.class);
 
-            final Call<OkResponse> call = apiService.createAppointment(PatientSessionManager.getInstance(getContext()).getLoggedPatientId(), sFragment.clinic_id, sFragment.specialty_id, String.valueOf(sFragment.mDoctor.getId()), String.valueOf(mSchedule.getId()));
+            String clinic_id = sFragment.clinic_id;
+            String specialty_id = sFragment.specialty_id;
+            if (mAppointment != null){
+                clinic_id = String.valueOf(mAppointment.getClinic().getId());
+                specialty_id = String.valueOf(mAppointment.getSpecialty().getId());
+            }
+            final Call<OkResponse> call = apiService.createAppointment(PatientSessionManager.getInstance(getContext()).getLoggedPatientId(), clinic_id, specialty_id, String.valueOf(mDoctor.getId()), String.valueOf(mSchedule.getId()));
             try {
                 Response<OkResponse> response = call.execute();
                 message = response.body().message;
