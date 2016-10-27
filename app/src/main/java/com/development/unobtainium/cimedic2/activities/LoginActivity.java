@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements SearchFragment.O
             focusView = mPasswordView;
             cancel = true;
         } else {
-            if (!(password.matches("^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$")) ){
+            if (!(password.matches("^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$")) || (password.length() < 9) ){
                 mPasswordView.setError(getString(R.string.error_incorrect_format));
                 focusView = mPasswordView;
                 cancel = true;

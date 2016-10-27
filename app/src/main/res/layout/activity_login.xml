@@ -28,10 +28,10 @@
         <RelativeLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:descendantFocusability="beforeDescendants"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:layout_height="370dp">
 
             <ProgressBar
                 style="?android:attr/progressBarStyleLarge"
@@ -105,6 +105,18 @@
                 android:layout_alignBottom="@+id/login_form"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="260dp" />
+
+            <Button
+                android:text="Olvidé mi contraseña"
+                android:layout_height="30dp"
+                android:background="@drawable/red_button"
+                android:id="@+id/button"
+                android:textAllCaps="false"
+                android:layout_width="170dp"
+                android:textColor="@color/whiteColor"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="34dp" />
 
         </RelativeLayout>
     </ScrollView>

@@ -209,11 +209,18 @@ public class RegistrationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (termsCheckbox.isChecked() || editingPatient != null){
-                    relationship_id = String.valueOf(relationshipSpinner.getSelectedItemPosition()+1);
-                    patient = new Patient(namesInput.getText().toString(), lastNameInput.getText().toString(), mothersLastNameInput.getText().toString(), bithdayInput.getText().toString(), districtSpinner.getSelectedItemPosition()+1, documentNumberInput.getText().toString(), docTypeSpinner.getSelectedItemPosition()+1, addressInput.getText().toString(), emailInput.getText().toString(), passwordInput.getText().toString());
-                    showProgress(true);
-                    mRegisterTask = new PatientRegisterTask(patient, relationship_id);
-                    mRegisterTask.execute((Void) null);
+                    if (getArguments().getBoolean(SHOW_PASSWORD)){
+                        if (!(passwordInput.getText().toString().matches("^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$")) || (passwordInput.getText().toString().length() < 9) ){
+                            passwordInput.setError(getString(R.string.error_incorrect_format));
+                            passwordInput.requestFocus();
+                        } else {
+                            relationship_id = String.valueOf(relationshipSpinner.getSelectedItemPosition()+1);
+                            patient = new Patient(namesInput.getText().toString(), lastNameInput.getText().toString(), mothersLastNameInput.getText().toString(), bithdayInput.getText().toString(), districtSpinner.getSelectedItemPosition()+1, documentNumberInput.getText().toString(), docTypeSpinner.getSelectedItemPosition()+1, addressInput.getText().toString(), emailInput.getText().toString(), passwordInput.getText().toString());
+                            showProgress(true);
+                            mRegisterTask = new PatientRegisterTask(patient, relationship_id);
+                            mRegisterTask.execute((Void) null);
+                        }
+                    }
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Debe aceptar los términos de uso", Toast.LENGTH_SHORT).show();
                 }
