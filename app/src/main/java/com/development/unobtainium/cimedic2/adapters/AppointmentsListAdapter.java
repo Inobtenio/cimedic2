@@ -57,6 +57,7 @@ public class AppointmentsListAdapter extends BaseAdapter{
         TextView doctor_name;
         ImageView doctor_picture;
         ImageView clinic_picture;
+        View appointment_status;
     }
 
     @Override
@@ -88,6 +89,10 @@ public class AppointmentsListAdapter extends BaseAdapter{
         } else {
             holder.clinic_picture.setImageDrawable(parent.getResources().getDrawable(R.drawable.clinic_placeholder));
         };
+        holder.appointment_status = row.findViewById(R.id.finished_appointment);
+        if (appointments.get(position).getStatus() == 1){
+            holder.appointment_status.setVisibility(View.INVISIBLE);
+        }
         holder.specialty_name = (TextView) row.findViewById(R.id.app_specialty);
         holder.specialty_name.setText(appointments.get(position).getSpecialty().getName());
         holder.schedule_date = (TextView) row.findViewById(R.id.app_date);

@@ -4,6 +4,7 @@ package com.development.unobtainium.cimedic2.models;
  * Created by unobtainium on 15/10/16.
  */
 public class Appointment {
+    private Integer status;
     private Patient patient;
     private Clinic clinic;
     private Specialty specialty;
@@ -48,5 +49,13 @@ public class Appointment {
 
     public void setSpecialty(Specialty specialty) {
         this.specialty = specialty;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }
