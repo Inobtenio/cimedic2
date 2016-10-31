@@ -1,5 +1,6 @@
 package com.development.unobtainium.cimedic2.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -143,7 +144,16 @@ public class AppointmentPreviewFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (mAppointment != null){
-                    Toast.makeText(getContext(), "Aún no implementado", Toast.LENGTH_LONG).show();
+                    if (mAppointment.getStatus() == 1){
+                        Toast.makeText(getContext(), "No puede editar una cita pasada", Toast.LENGTH_SHORT).show();
+                    } else {
+                        FragmentManager fm = getFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        SchedulesFragment llf = SchedulesFragment.newInstance(mAppointment.getClinic().getId(), mAppointment.getSpecialty().getId(), mAppointment.getDoctor());
+                        ft.replace(R.id.currentFragment, llf);
+                        ft.addToBackStack(null);
+                        ft.commit();
+                    }
                 } else {
                     showProgress(true);
                     mAppointmentTask = new RegisterAppointmentTask();

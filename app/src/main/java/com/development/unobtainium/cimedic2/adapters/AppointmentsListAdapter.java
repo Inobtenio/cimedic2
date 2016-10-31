@@ -84,7 +84,7 @@ public class AppointmentsListAdapter extends BaseAdapter{
         if (!appointments.get(position).getClinic().getImage().equals("")) {
             Picasso.with(parent.getContext())
                     .load(appointments.get(position).getClinic().getImage())
-                    .fit().centerCrop()
+                    .fit()
                     .into(holder.clinic_picture);
         } else {
             holder.clinic_picture.setImageDrawable(parent.getResources().getDrawable(R.drawable.clinic_placeholder));
