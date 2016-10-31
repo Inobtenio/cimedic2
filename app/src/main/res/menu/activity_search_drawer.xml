@@ -5,15 +5,15 @@
         <item
             android:id="@+id/nav_search"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Search" />
+            android:title="Clínicas" />
         <item
             android:id="@+id/nav_patients"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Profile" />
+            android:title="Usuarios" />
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="History" />
+            android:title="Historial" />
     </group>
 
     <group android:menuCategory="secondary">
