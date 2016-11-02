@@ -14,6 +14,10 @@
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Historial" />
+        <item
+            android:id="@+id/nav_prescriptions"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Prescripciones" />
     </group>
 
     <group android:menuCategory="secondary">
