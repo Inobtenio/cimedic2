@@ -22,6 +22,7 @@ import com.development.unobtainium.cimedic2.fragments.DoctorsFragment;
 import com.development.unobtainium.cimedic2.fragments.HistoryFragment;
 import com.development.unobtainium.cimedic2.R;
 import com.development.unobtainium.cimedic2.fragments.PatientsFragment;
+import com.development.unobtainium.cimedic2.fragments.PrescriptionsFragment;
 import com.development.unobtainium.cimedic2.fragments.RegistrationFragment;
 import com.development.unobtainium.cimedic2.fragments.SchedulesFragment;
 import com.development.unobtainium.cimedic2.fragments.SearchFragment;
@@ -32,7 +33,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 public class SearchActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.OnFragmentInteractionListener, PatientsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, RegistrationFragment.OnFragmentInteractionListener, SpecialtiesFragment.OnFragmentInteractionListener, DoctorsFragment.OnFragmentInteractionListener, SchedulesFragment.OnFragmentInteractionListener, AppointmentPreviewFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchFragment.OnFragmentInteractionListener, PatientsFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, RegistrationFragment.OnFragmentInteractionListener, SpecialtiesFragment.OnFragmentInteractionListener, DoctorsFragment.OnFragmentInteractionListener, SchedulesFragment.OnFragmentInteractionListener, AppointmentPreviewFragment.OnFragmentInteractionListener, PrescriptionsFragment.OnFragmentInteractionListener {
 
     private ImageView currentPatientPicture;
     private String imageUrl;
@@ -141,6 +142,13 @@ public class SearchActivity extends AppCompatActivity
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             HistoryFragment llf = new HistoryFragment();
+            ft.addToBackStack(null);
+            ft.replace(R.id.currentFragment, llf);
+            ft.commit();
+        } else if (id == R.id.nav_prescriptions) {
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            PrescriptionsFragment llf = new PrescriptionsFragment();
             ft.addToBackStack(null);
             ft.replace(R.id.currentFragment, llf);
             ft.commit();
