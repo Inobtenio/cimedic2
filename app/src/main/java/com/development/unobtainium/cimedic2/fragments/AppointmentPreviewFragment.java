@@ -133,8 +133,10 @@ public class AppointmentPreviewFragment extends Fragment {
         patientPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PatientsFragment fragment = PatientsFragment.newInstance(false, that);
-                fragment.show(getFragmentManager(), "Dialog");
+                if (mAppointment == null){
+                    PatientsFragment fragment = PatientsFragment.newInstance(false, that);
+                    fragment.show(getFragmentManager(), "Dialog");
+                }
             }
         });
         if (mAppointment != null){
