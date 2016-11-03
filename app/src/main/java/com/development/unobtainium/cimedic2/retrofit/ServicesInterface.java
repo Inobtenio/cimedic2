@@ -8,6 +8,7 @@ import com.development.unobtainium.cimedic2.responses.ClinicsResponse;
 import com.development.unobtainium.cimedic2.responses.DoctorsResponse;
 import com.development.unobtainium.cimedic2.responses.OkResponse;
 import com.development.unobtainium.cimedic2.responses.PatientResponse;
+import com.development.unobtainium.cimedic2.responses.PrescriptionsResponse;
 import com.development.unobtainium.cimedic2.responses.RelativesResponse;
 import com.development.unobtainium.cimedic2.responses.SchedulesResponse;
 import com.development.unobtainium.cimedic2.responses.SpecialtiesResponse;
@@ -92,4 +93,7 @@ public interface ServicesInterface {
 
     @PUT("appointments/{appointment_id}")
     Call<OkResponse> updateAppointment(@Header("Authorization") String authorization, @Path("appointment_id") String appointment_id);
+
+    @GET("prescriptions")
+    Call<PrescriptionsResponse> getPrescriptions(@Header("Authorization") String authorization);
 }
