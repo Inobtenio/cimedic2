@@ -1,5 +1,6 @@
 package com.development.unobtainium.cimedic2.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.development.unobtainium.cimedic2.R;
+import com.development.unobtainium.cimedic2.fragments.PrescriptionDetailFragment;
 import com.development.unobtainium.cimedic2.models.Prescription;
 
 import java.util.ArrayList;
@@ -51,6 +53,13 @@ public class PrescriptionsListAdapter extends BaseAdapter {
         row = LayoutInflater.from(mContext).inflate(R.layout.prescription_item, parent, false);
         holder.reason = (TextView) row.findViewById(R.id.prescription_reason);
         holder.reason.setText(prescriptionsList.get(i).getReason());
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PrescriptionDetailFragment fragment = PrescriptionDetailFragment.newInstance();
+                fragment.show(((Activity) mContext).getFragmentManager(), "Dialog");
+            }
+        });
         return row;
     }
 }
