@@ -8,8 +8,10 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.development.unobtainium.cimedic2.R;
+import com.development.unobtainium.cimedic2.models.Prescription;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,12 +24,8 @@ import com.development.unobtainium.cimedic2.R;
 public class PrescriptionDetailFragment extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String description;
+    private String expiration_date;
 
     private OnFragmentInteractionListener mListener;
 
@@ -36,18 +34,25 @@ public class PrescriptionDetailFragment extends DialogFragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static PrescriptionDetailFragment newInstance() {
+    public static PrescriptionDetailFragment newInstance(Prescription prescription) {
         PrescriptionDetailFragment fragment = new PrescriptionDetailFragment();
+        fragment.description = prescription.getDescription();
+        fragment.expiration_date = prescription.getExpiration_date();
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        TextView description = (TextView) getView().findViewById(R.id.prescription_description);
+        TextView expiration_date = (TextView) getView().findViewById(R.id.prescription_expiration_date);
+        description.setText(this.description);
+        expiration_date.setText(this.expiration_date);
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
